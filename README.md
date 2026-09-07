@@ -4,6 +4,8 @@ ROS Noetic + Gazebo Classic 11 下的 Hydrone 空水跨介质训练工作区。�
 
 **服务器部署入口：[tools/server/README.md](tools/server/README.md)。** 面向 Ubuntu 20.04、Python 3.8；阿里云 PAI DSW PPU 保留镜像厂商版 PyTorch，禁止用 NVIDIA CUDA wheel 覆盖它。本机 NVIDIA Conda 配置不能用于 PPU。
 
+本次检查记录见 [发布验证报告](docs/VALIDATION_20260907.md)。服务器 PPU 实测结果尚待补充。
+
 ## 当前训练入口
 
 `src/hydrone_deep_rl_icra/hydrone_aerial_underwater_deep_rl/launch/icra2021_paper.launch`

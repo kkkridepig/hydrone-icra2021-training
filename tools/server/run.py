@@ -84,11 +84,13 @@ def main():
     config_path.write_text(yaml.safe_dump(config, sort_keys=False))
     checkpoint_args = []
     start_episode = 0
+    start_global_step = 0
     if args.resume:
         source = args.resume.expanduser().resolve()
         payload = torch.load(source, map_location='cpu', weights_only=False)
         assert payload['stage'] == args.stage and payload['algorithm'] == args.algorithm, 'Cross-stage/algorithm resume is forbidden'
         start_episode = int(payload['episode'])
+        start_global_step = int(payload['global_step'])
         if start_episode >= config['episodes']:
             raise ValueError('Checkpoint already reached the configured episode target')
         finite(payload)
@@ -105,6 +107,12 @@ def main():
             manifest['source_sha256'][str(path.relative_to(ROOT))] = hashlib.sha256(path.read_bytes()).hexdigest()
     head = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=ROOT, capture_output=True, text=True)
     manifest['git_commit'] = head.stdout.strip() if head.returncode == 0 else None
+    if head.returncode == 0:
+        manifest['git_status'] = subprocess.check_output(
+            ['git', 'status', '--porcelain'], cwd=ROOT, text=True)
+    for path in sorted((ROOT / 'tools/server').glob('*')):
+        if path.is_file():
+            manifest['source_sha256'][str(path.relative_to(ROOT))] = hashlib.sha256(path.read_bytes()).hexdigest()
     (output / 'invocation.json').write_text(json.dumps(manifest, indent=2))
     command = ['roslaunch', 'hydrone_aerial_underwater_deep_rl', 'icra2021_paper.launch',
                f'algorithm:={args.algorithm}', f'stage:={args.stage}',
@@ -139,6 +147,8 @@ def main():
     payload = torch.load(summary['checkpoint'], map_location='cpu', weights_only=False)
     finite(payload)
     assert payload['algorithm'] == args.algorithm and payload['stage'] == args.stage
+    assert payload['episode'] == summary['completed_training_episodes'], 'Stale checkpoint episode'
+    assert payload['global_step'] == start_global_step + summary['total_env_steps'], 'Stale checkpoint step'
     assert payload['config']['device'] == 'cuda:0'
     assert payload['observation_contract']['state_dim'] == 26 and payload['action_contract']['dim'] == 3
     if args.steps == 1000: assert payload['update_count'] > 0, 'No gradient updates'

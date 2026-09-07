@@ -1354,8 +1354,9 @@
   "tools/server/probe_ppu.py": "434331968f3e9e1b639e26ec7de05c5a8736f0a212abd1ff40251fe8da6e45b8",
   "tools/server/requirements-ppu.txt": "438c9d6dd18db2f9afcef2cab29b3b6f57efbe4981611b2cd2314ada0cc1f08e",
   "tools/server/run.bash": "b0d7814a651b7bf8b62bdc19c1550e8e4ae3446868857928b00c39547e130a11",
-  "tools/server/run.py": "e884a51f29135be461eb6ba4b954d7e341ff6a9ba29f715fea859ab8abd8c24c",
+  "tools/server/run.py": "23c947cfe11be99dca310f6699e406dfafc2e9f0f075a41eec35b0f245d0797a",
   "tools/server/setup.bash": "610b445e2cd7ee16b24cb488611bfb46c53cd50dfd29287588c44e87b790e5be",
   "tools/server/setup_ppu.bash": "836326a330bc8fbdbdd0906ec10c4bf6ec12e33be270461a91b0b95371dcb939",
-  "tools/server/validate_accelerator.py": "6603ee496fcc4788fda1feda4bf1f65cec086498634384ffad617f7348ab444e"
+  "tools/server/validate_accelerator.py": "6603ee496fcc4788fda1feda4bf1f65cec086498634384ffad617f7348ab444e",
+  "tools/server/inspect_graph.py": "d8f983515949470e0c6549d0407cfd57bfeff678927bd7ee16eab4bc35ef6f44"
 }
