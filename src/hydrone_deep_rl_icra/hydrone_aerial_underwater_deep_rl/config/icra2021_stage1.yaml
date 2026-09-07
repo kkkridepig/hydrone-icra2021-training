@@ -1,0 +1,15 @@
+# Non-operative stage-specific scaffold; inherits paper values after confirmation.
+schema_version: 1
+profile: paper_stage1_pending
+base_config: icra2021_paper.yaml
+stage: 1
+world: stage_1
+episodes: 1000
+evaluation_goals:
+  air_to_water:
+    start: [0.0, 0.0, 2.5]
+    goal: [2.0, 3.0, -1.0]
+  water_to_air:
+    start: [2.0, 3.0, -1.0]
+    goal: [0.0, 0.0, 2.5]
+

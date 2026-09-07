@@ -1,0 +1,38 @@
+# Forensic reference only. This is not the paper-training configuration.
+schema_version: 1
+profile: upstream_public_reference
+source_files:
+  environment: scripts/environment_3D.py
+  goal_manager: scripts/respawnGoal_3D.py
+  ddpg: scripts/ddpg_air3D_tanh_3layers.py
+  sac: scripts/sac_air3D_tanh_3layers.py
+  velocity_bridge: scripts/velocity0.py
+
+observation:
+  state_dim: 26
+  scan_beams: 20
+  collision_threshold_m: 0.6
+  nan_replacement: 0.0
+  inf_replacement: 20.0
+
+training:
+  replay_capacity: 50000
+  batch_size: 256
+  learning_rate: 0.0003
+  gamma: 0.99
+  ddpg_tau: 0.001
+  sac_tau: 0.01
+  max_episodes: 10001
+  max_steps: 500
+
+upstream_quirks:
+  goal_transition_oversampling: 3
+  sac_past_action_semantics: normalized_in_public_loop
+  goal_sampling_xyz:
+    x: [0.0, 3.9]
+    y: [-4.0, 3.9]
+    z: [0.5, 3.9]
+  obstacle_exclusion: commented_out
+  goal_model_path: old_package_name_and_missing_model_sdf
+  python3_entrypoint: module_level_global_world_compile_error
+

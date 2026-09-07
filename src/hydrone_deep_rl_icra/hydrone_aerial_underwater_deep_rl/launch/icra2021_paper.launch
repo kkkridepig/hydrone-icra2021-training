@@ -1,0 +1,64 @@
+<!--
+  Unified paper wrapper.  It exposes the Phase 7 contract while keeping the
+  agent process opt-in: run_agent defaults false so merely checking or starting
+  the simulation cannot launch formal training.
+-->
+<launch>
+  <arg name="algorithm" default="ddpg" doc="ddpg or sac" />
+  <arg name="stage" default="1" doc="1 or 2" />
+  <arg name="mode" default="train" doc="train, evaluate, or resume" />
+  <arg name="gui" default="false" />
+  <arg name="paused" default="true" />
+  <arg name="namespace" default="hydrone_aerial_underwater0" />
+  <arg name="config" default="" />
+  <arg name="checkpoint" default="" />
+  <arg name="run_agent" default="false" />
+  <arg name="episode_limit" default="0" doc="optional bounded run limit; 0 means config target" />
+  <arg name="step_limit" default="0" doc="optional environment-step gate; 0 means unlimited" />
+
+  <include if="$(eval int(arg('stage')) == 1)"
+           file="$(find hydrone_aerial_underwater_deep_rl)/launch/icra2021_simulation.launch">
+    <arg name="world_name" value="stage_1" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)" />
+    <arg name="namespace0" value="$(arg namespace)" />
+  </include>
+
+  <include if="$(eval int(arg('stage')) == 2)"
+           file="$(find hydrone_aerial_underwater_deep_rl)/launch/icra2021_simulation.launch">
+    <arg name="world_name" value="stage_2" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)" />
+    <arg name="namespace0" value="$(arg namespace)" />
+  </include>
+
+  <node name="icra2021_publisher_guard" pkg="hydrone_aerial_underwater_deep_rl"
+        type="icra2021_publisher_guard.py" output="screen" required="true">
+    <param name="algorithm" value="$(arg algorithm)" />
+    <param name="stage" value="$(arg stage)" />
+    <param name="mode" value="$(arg mode)" />
+    <param name="namespace" value="$(arg namespace)" />
+    <param name="config" value="$(arg config)" />
+    <param name="checkpoint" value="$(arg checkpoint)" />
+    <param name="run_agent" value="$(arg run_agent)" />
+    <param name="episode_limit" value="$(arg episode_limit)" />
+    <param name="step_limit" value="$(arg step_limit)" />
+  </node>
+
+  <node if="$(arg run_agent)" name="icra2021_agent"
+        pkg="hydrone_aerial_underwater_deep_rl" type="icra2021_agent.py"
+        output="screen" required="true">
+    <param name="algorithm" value="$(arg algorithm)" />
+    <param name="stage" value="$(arg stage)" />
+    <param name="mode" value="$(arg mode)" />
+    <param name="namespace" value="$(arg namespace)" />
+    <param name="config" value="$(arg config)" />
+    <param name="checkpoint" value="$(arg checkpoint)" />
+    <param name="episode_limit" value="$(arg episode_limit)" />
+    <param name="step_limit" value="$(arg step_limit)" />
+  </node>
+
+  <!-- The train/evaluate/resume node is intentionally not wired in this
+       phase unless run_agent:=true. The guard and simulation wrapper establish
+       the launch contract; formal training remains a separate explicit action. -->
+</launch>

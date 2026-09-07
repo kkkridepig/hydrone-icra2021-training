@@ -1,0 +1,32 @@
+# Non-operative SAC smoke configuration. This is intentionally separate from
+# the paper profile and only bounds the runtime for Phase 6 validation.
+schema_version: 1
+profile: sac_smoke
+base_config: icra2021_paper.yaml
+algorithm: sac
+stage: 1
+episodes: 5
+max_steps: 50
+gui: false
+paused: false
+training:
+  replay_capacity: 512
+  batch_size: 32
+  warmup_steps: 32
+  update_every: 1
+  hidden_dim: 512
+  critic_hidden_layers: 2
+  learning_rate: 0.001
+  gamma: 0.99
+  tau: 0.01
+  alpha: 0.2
+  automatic_entropy_tuning: true
+  target_entropy: -3.0
+  goal_transition_oversampling: 3
+  seed: 0
+checkpoint:
+  path: /home/rosnoetic/hydrone_repro/icra2021/checkpoints/phase6_sac_smoke.pt
+  full_resume: true
+disturbances:
+  wind_enabled: false
+  source: user_decision

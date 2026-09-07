@@ -1,0 +1,62 @@
+# Operational Stage 1 profile for Phase 8.  The launch wrapper selects the
+# algorithm; shared paper values are explicit here so DDPG and SAC runs cannot
+# silently fall back to smoke settings.
+schema_version: 1
+profile: icra2021_stage1_formal
+base_config: icra2021_paper.yaml
+stage: 1
+world: stage_1
+episodes: 1000
+max_steps: 500
+seed: 0
+
+training:
+  state_dim: 26
+  action_dim: 3
+  hidden_dim: 512
+  learning_rate: 0.001
+  gamma: 0.99
+  ddpg_tau: 0.001
+  sac_tau: 0.01
+  alpha: 0.2
+  sac_alpha: 0.2
+  automatic_entropy_tuning: true
+  sac_automatic_entropy_tuning: true
+  target_entropy: -3.0
+  sac_target_entropy: -3.0
+  critic_hidden_layers: 2
+  replay_capacity: 50000
+  batch_size: 256
+  warmup_steps: 256
+  update_every: 1
+  noise_theta: 0.15
+  noise_sigma: 0.2
+  noise_sigma_min: 0.05
+  noise_decay_steps: 1000000
+  goal_transition_oversampling: 3
+  seed: 0
+  device: cpu
+
+goal_sampling:
+  mode: upstream_public
+  source: public_respawnGoal_3D.py
+
+disturbances:
+  wind_enabled: false
+  source: user_decision
+
+evaluation:
+  enabled: true
+  interval_episodes: 50
+  episodes: 2
+  max_steps: 500
+
+logging:
+  moving_average_window: 300
+  checkpoint_interval_episodes: 10
+  progress_interval_steps: 100
+  output_dir: /home/rosnoetic/hydrone_repro/icra2021/runs/{algorithm}/stage_{stage}/seed_{seed}
+
+checkpoint:
+  path_template: /home/rosnoetic/hydrone_repro/icra2021/checkpoints/phase8_{algorithm}_stage{stage}_seed{seed}.pt
+  full_resume: true

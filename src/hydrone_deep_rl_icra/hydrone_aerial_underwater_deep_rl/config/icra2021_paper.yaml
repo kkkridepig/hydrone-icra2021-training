@@ -1,0 +1,80 @@
+# Non-operative paper-contract scaffold. Do not use for formal training until
+# the paper launch/integration contracts pass and the user explicitly approves.
+schema_version: 1
+profile: paper_contract_pending
+evidence_policy: user_prompt_contract_unless_marked_code
+
+ros:
+  namespace: /hydrone_aerial_underwater0
+  scan_topic: scan
+  ground_truth_odom_topic: ground_truth/odometry
+  controller_odom_topic: odometry_sensor1/odometry
+  cmd_vel_topic: cmd_vel
+  trajectory_topic: command/trajectory
+  motor_speed_topic: command/motor_speed
+  submerged_topic: is_submerged
+
+observation:
+  scan_beams: 20
+  scan_frequency_hz: 5.0
+  state_dim: 26
+  previous_action_semantics: physical
+  assert_finite: true
+
+action:
+  dim: 3
+  forward_velocity_mps: [0.0, 0.25]
+  vertical_velocity_mps: [-0.25, 0.25]
+  delta_yaw_rad: [-0.25, 0.25]
+
+reward:
+  goal_distance_m: 0.25
+  goal: 100.0
+  collision: -10.0
+  otherwise: 0.0
+  goal_event_terminates: false
+  collision_terminates: true
+
+episode:
+  start: [0.0, 0.0, 2.5]
+  max_steps: 500
+  time_limit_is_truncated: true
+
+training:
+  learning_rate: 0.001
+  replay_capacity: 50000
+  batch_size: 256
+  gamma: 0.99
+  gamma_source: upstream_default_not_reported_in_paper
+  ddpg_tau: 0.001
+  ddpg_tau_source: upstream_default_not_reported_in_paper
+  sac_tau: 0.01
+  sac_tau_source: upstream_default_not_reported_in_paper
+  sac_alpha: 0.2
+  sac_alpha_source: upstream_default_not_reported_in_paper
+  sac_automatic_entropy_tuning: true
+  sac_automatic_entropy_tuning_source: upstream_default_not_reported_in_paper
+  sac_target_entropy: -3.0
+  sac_target_entropy_source: standard_action_dim_heuristic_not_reported_in_paper
+  stage1_episodes: 1000
+  stage2_episodes: 2500
+  seeds:
+    count: 3
+    values: [0, 1, 2]
+    source: recommended_local_not_reported_in_paper
+
+goal_sampling:
+  mode: upstream_public
+  source: public_respawnGoal_3D.py
+
+disturbances:
+  wind_enabled: false
+  source: user_decision
+
+replay:
+  goal_transition_oversampling: 3
+  source: user_decision_public_code_compatibility
+
+stage2:
+  static_model_policy: shared_model_allowed_by_user
+  static: true

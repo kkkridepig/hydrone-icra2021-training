@@ -1,0 +1,21 @@
+# Non-operative smoke configuration. This intentionally does not replace the
+# paper config; it overrides only runtime limits needed for a bounded smoke.
+schema_version: 1
+profile: ddpg_smoke
+base_config: icra2021_paper.yaml
+algorithm: ddpg
+stage: 1
+episodes: 5
+max_steps: 50
+gui: false
+paused: false
+training:
+  replay_capacity: 512
+  batch_size: 32
+  warmup_steps: 32
+  update_every: 1
+  hidden_dim: 512
+  seed: 0
+checkpoint:
+  path: /home/rosnoetic/hydrone_repro/icra2021/checkpoints/phase5_ddpg_smoke.pt
+  full_resume: true

@@ -1,0 +1,15 @@
+# Non-operative stage-specific scaffold; the shared obstacle model is static
+# and was validated in the Phase 3 Gazebo smoke test.
+schema_version: 1
+profile: paper_stage2_pending
+base_config: icra2021_paper.yaml
+stage: 2
+world: stage_2
+episodes: 2500
+obstacles:
+  count: 4
+  positions: [[2.0, 2.0, 2.0], [-2.0, -2.0, 2.0], [2.0, -2.0, 2.0], [-2.0, 2.0, 2.0]]
+  static: true
+  model_path: models/obstacle_1/model.sdf
+  model_policy: shared_model_allowed_by_user
+  goal_exclusion: true

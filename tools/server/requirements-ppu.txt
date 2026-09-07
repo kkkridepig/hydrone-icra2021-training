@@ -1,0 +1,9 @@
+# Preserve image-provided torch and numpy with generated constraints.
+# Minimal dependencies for the 26-D DDPG/SAC entrypoint; no vision/VLA stack.
+PyYAML==6.0.1
+pytest==7.4.4
+rospkg==1.6.0
+catkin-pkg==1.0.0
+empy==3.3.4
+defusedxml==0.7.1
+netifaces==0.11.0

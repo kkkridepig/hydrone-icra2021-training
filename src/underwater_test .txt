@@ -1,0 +1,22 @@
+source /opt/ros/noetic/setup.bash
+source ~/hydrone_ws/devel/setup.bash
+
+roslaunch uuv_gazebo_worlds empty_underwater_world.launch
+  
+source /opt/ros/noetic/setup.bash
+source ~/hydrone_ws/devel/setup.bash
+
+roslaunch uuv_descriptions upload_rexrov.launch mode:=hydrodynamics_only namespace:=rexrov x:=0 y:=0 z:=-20
+
+source ~/hydrone_ws/devel/setup.bash
+for i in 1 2 3 4 5
+do
+  echo "===== sample $i ====="
+  rosservice call /gazebo/get_model_state \
+  "model_name: 'rexrov'
+relative_entity_name: 'world'" |
+  grep -A 14 '^pose:'
+  sleep 2
+done
+ 
+
