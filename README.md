@@ -4,7 +4,21 @@ ROS Noetic + Gazebo Classic 11 下的 Hydrone 空水跨介质训练工作区。�
 
 **服务器部署入口：[tools/server/README.md](tools/server/README.md)。** 面向 Ubuntu 20.04、Python 3.8；阿里云 PAI DSW PPU 保留镜像厂商版 PyTorch，禁止用 NVIDIA CUDA wheel 覆盖它。本机 NVIDIA Conda 配置不能用于 PPU。
 
-本次检查记录见 [发布验证报告](docs/VALIDATION_20260907.md)。服务器 PPU 实测结果尚待补充。
+原 DDPG/SAC 发布检查见 [2026-09-07 验证报告](docs/VALIDATION_20260907.md)。新增界面实验的历史服务器证据与本次离线复核见下文；它们不代表 DDPG/SAC 已复现论文指标。
+
+## 界面机制实验与证据整理（2026-09-17）
+
+已按原始文件哈希纳入两阶段实验、ROS 仿真时钟修复、冻结模型诊断和只读审计。当前实现为小 CNN、8 步运动历史 MLP、H=4 动作 MLP、masked L1 监督与规则执行调度；低层 Lee 闭环持续工作。
+
+- [部署与数据保留](docs/experiments/DEPLOYMENT.md)：PPU 环境、已有服务器迁移和实际运行命令。
+- [研究状态](docs/experiments/RESEARCH_STATUS_20260917.md)：实验结果、负结果、局限与尚未执行的下一步。
+- [交付物与提交映射](docs/experiments/ARTIFACT_INVENTORY.md)：实际收到的解压目录、文件 SHA256、补丁顺序及缺失原件。
+- [本次验证记录](docs/experiments/VALIDATION.md)：实际通过、跳过及未执行的检查。
+- [两阶段入口](tools/interface_experiment/run.bash)、[冻结诊断入口](tools/interface_diagnostic/run.bash)、[离线审计](tools/interface_analysis/audit.py)。
+
+真实日志离线重算确认：phase1 为 48/48，clockfix 后 phase2 为 120/120；追加诊断为 36 校准＋168 测试，teacher/short 各 24/24，其余五种策略各 20/24。全部跨界不等于任务成功，当前没有证实 separated 的稳定性优势。到达后继续运行 10 秒的 56 回合方案仍是提案。
+
+本次没有启动 ROS/Gazebo/PPU 训练。原始 ZIP 容器未提供，收到的是已解压内容；权重与训练数组保留在服务器并在 Git 仓库外归档，不随 Git 分发。原包 README 中的“交付前未运行”等表述按历史原件保留，当前入口说明以新增部署文档为准。
 
 ## 当前训练入口
 

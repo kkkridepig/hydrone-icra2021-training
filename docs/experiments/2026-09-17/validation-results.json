@@ -1,0 +1,198 @@
+{
+  "runtime": "3.12.0 (tags/v3.12.0:0fb18b0, Oct  2 2023, 13:03:39) [MSC v.1935 64 bit (AMD64)]",
+  "numpy": "2.5.2",
+  "torch_available": false,
+  "reports_recomputed": {
+    "phase1_evidence": {
+      "diagnosis": "READY_FOR_PHASE2",
+      "episodes": 48,
+      "successes": {
+        "teacher": 48
+      },
+      "method_counts": {
+        "teacher": 48
+      },
+      "step_counts_match": true,
+      "gate": {
+        "passed": true,
+        "checks": {
+          "episode_count": true,
+          "complete": true,
+          "command_watchdog": true,
+          "air_to_water_success": true,
+          "air_to_water_crossing": true,
+          "water_to_air_success": true,
+          "water_to_air_crossing": true,
+          "nonconstant_camera": true,
+          "camera_fresh": true,
+          "command_timing": true,
+          "visual_active_coverage": true,
+          "motion_label_previous_interval_coverage": true
+        },
+        "summary": {
+          "air_to_water": {
+            "clean_success_rate": 1.0,
+            "clean_crossing_rate": 1.0,
+            "n": 6
+          },
+          "water_to_air": {
+            "clean_success_rate": 1.0,
+            "clean_crossing_rate": 1.0,
+            "n": 6
+          },
+          "image_std_median": 0.3968719218141065,
+          "image_age_median": 0.06999999999993634,
+          "dt_p95": 0.21000000000000085
+        },
+        "expected_episodes": 48,
+        "actual_episodes": 48,
+        "claim": "Operational feasibility in the retained legacy model; NOT physical validation"
+      }
+    },
+    "phase2_evidence": {
+      "diagnosis": "INCOMPLETE",
+      "episodes": 0,
+      "successes": {},
+      "method_counts": {},
+      "step_counts_match": true,
+      "gate": null
+    },
+    "第三次_evidence": {
+      "diagnosis": "PILOT_RESULTS_REQUIRE_REVIEW",
+      "episodes": 120,
+      "successes": {
+        "long": 24,
+        "separated": 24,
+        "short": 24,
+        "teacher": 24,
+        "unified": 24
+      },
+      "method_counts": {
+        "long": 24,
+        "separated": 24,
+        "short": 24,
+        "teacher": 24,
+        "unified": 24
+      },
+      "step_counts_match": true,
+      "gate": null
+    }
+  },
+  "provenance": {
+    "recorded_files": 336,
+    "local_source_files_matched": 296,
+    "missing_server_build_files": {
+      "devel/lib/libuuv_gazebo_ros_gps_plugin.so": "dff47d8f6ad3f7b2e50cfc348af9f2d907e5a1de98db97d4f1a1e93c46c7d026",
+      "devel/lib/libuuv_gazebo_ros_imu_plugin.so": "e7a3b78889bf1924e1908856d4a4fe2d32e2d13a0cb3091694b7507d3fe0f486",
+      "devel/lib/libuuv_underwater_current_plugin.so": "aa537aacaedfe4fcf0006bdc9274699330c0db91b9c9f81c08198578993ae6da",
+      "devel/lib/libuuv_thruster_ros_plugin.so": "250a7220ed55d998db7a2cb658ce82a91a44ec1717725d67c36649264dd44b54",
+      "devel/lib/libuuv_gazebo_ros_cpc_plugin.so": "7d11b0aad7cc79bd7771defdbd71b31c7497190f52e58e9dc23fbe6b562a0b4d",
+      "devel/lib/libuuv_fin_plugin.so": "24a80cc1b1ce271ec13153b7e8e67a88d3ac84c88d484a114f92308c037f279d",
+      "devel/lib/libuuv_sc_ros_interface_plugin.so": "99f3a5a0ee47332875b9d222eb03a7a017396de45222acfe15d0a1e74c76fb65",
+      "devel/lib/libuuv_gazebo_ros_subsea_pressure_plugin.so": "17a4fc2ec65c4c43e39e3c692909513f70a9dd59a20805c517583b04ac36e4ff",
+      "devel/lib/libuuv_underwater_object_ros_plugin.so": "35bc4d8e0592f5d8ba91cc3eec5e746f1c56f5902a64076ce504b7c7a15a9535",
+      "devel/lib/libuuv_gazebo_ros_pose_gt_plugin.so": "a41b2bd4babf8c3f7a54cf290664f317648bca5ac4a7f9e925bdfa4c72946d83",
+      "devel/lib/libuuv_fin_ros_plugin.so": "4d02c3268a38ccac2d9ebf60b56199ae7cf9c6bbdf0697c2ff8c336812a786ba",
+      "devel/lib/libuuv_gazebo_ros_base_sensor_plugin.so": "10ea2d250f9e3de67780e7674dabc38e2743f003cc0b5e151f7a63a29a9f2203",
+      "devel/lib/libuuv_gazebo_plugins_msgs.so": "5bcf756656d3af1faaa33c366a66d7c0a28de69ad7d3da3f54a3fd60b597944f",
+      "devel/lib/libuuv_underwater_current_ros_plugin.so": "a4eea83345431c740d99a2f9527bb0b76ea91e9efe120b609a5af183e7486c66",
+      "devel/lib/libuuv_dynamics.so": "46cf506e49ef6a8846fdb65b960180e9a8746707ee156263265793150f5fd61e",
+      "devel/lib/libuuv_gazebo_ros_camera_plugin.so": "bc6042b61fb43c1665cef45b8e9c1a9a3ae718a1a8e07af71d74da34b73d7029",
+      "devel/lib/libuuv_gazebo_ros_rpt_plugin.so": "1d533abe6032d221ee29c008fe366690312fc7e8fce3e15f0ca6be13018f70f4",
+      "devel/lib/libuuv_underwater_object_plugin.so": "2aa6a061603b282f976fd260c00fc83cea2413fa9fe005c2ed7e1af3b07bc98d",
+      "devel/lib/libuuv_accelerations_test_plugin.so": "41710c20a7d66da808ab9c75ff7315951787df8f3d229365af857b20fa4238e7",
+      "devel/lib/libuuv_gazebo_ros_dvl_plugin.so": "63f50981279dc587b8aa3e1b979a9cfaaaaca772bf3ac877b464e093552c83fa",
+      "devel/lib/libuuv_sensor_gazebo_msgs.so": "e24acb0ba629e780623c5ba2e4dc1e9579c7d323d88bd8c5bf24c5862ca921b7",
+      "devel/lib/libuuv_gazebo_ros_base_model_plugin.so": "1ad07d541af02925c254e848bdd89d41570281db48360e83d25e9e6277815adc",
+      "devel/lib/libuuv_thruster_plugin.so": "e39b0255a504dc1dd3b592dba4bc3a9b5f401b5995b64cba39cddd77cc9131cd",
+      "devel/lib/libuuv_gazebo_ros_magnetometer_plugin.so": "55859dbc5ee95712995ed7c7406b2f50a8d271ff7fc2f5dc93b10659de3f6cd9",
+      "devel/lib/libuuv_joint_state_publisher.so": "07fc968cd29249a6cdb72a9f6c7b88c4fa71bd8638799122f01a38a758bd60c9",
+      "devel/lib/librotors_gazebo_wind_plugin.so": "c1d699fa1c9f2d12cbc29d19bb6d47240aeb2ca631c3a6ceeee6c92e0fe6be05",
+      "devel/lib/librotors_gazebo_odometry_plugin.so": "c8a30ab96d439124c6d7ac43ee9baccfb766665805309ab558c38753e3a0fa6c",
+      "devel/lib/librotors_gazebo_motor_model.so": "0d62bccf9992ad3f54c132c56a36761f1ec3f1cb14471a47b0fed43b78fa4e5b",
+      "devel/lib/librotors_gazebo_magnetometer_plugin.so": "fe2014c79e40c8897e6dda9daed6575182e6bc996632064f4123cb8033cdae4a",
+      "devel/lib/librotors_gazebo_imu_plugin.so": "346e9a36f92f777c99705beceace4842de9dbad66b807638ef89bf5d5496e2b9",
+      "devel/lib/librotors_gazebo_bag_plugin.so": "95928e5558988163b7c1c76826773bbd51c925ecf174fa57e2dbabcc79eef426",
+      "devel/lib/librotors_gazebo_noisydepth_plugin.so": "2b01ce2c606bb5549ff8ac0f8d2f49b6832775225428dff15fba3bf7c97742a1",
+      "devel/lib/librotors_gazebo_controller_interface.so": "81066d86adcbcebad128b83fcc88466f685ebf4eae19f663371db9029627522f",
+      "devel/lib/librotors_gazebo_lidar_plugin.so": "ee80234a42803edb0665c271034a3e973181e62be0e3abdd28264686f32d7d90",
+      "devel/lib/librotors_gazebo_fw_dynamics_plugin.so": "6d0f9a4aa9d78e4be1d8bf353698179cbd4daa9f1343ed4edf9596323a17305e",
+      "devel/lib/librotors_gazebo_ros_interface_plugin.so": "12184400794d98fa6ab2e19242856e75444581256176cf994238c1c895bbc2f6",
+      "devel/lib/librotors_gazebo_pressure_plugin.so": "07ff4d0b2ebd3f2dc3f591a36592973ae0eede03077a2d595657b0d1452aaef0",
+      "devel/lib/librotors_gazebo_multirotor_base_plugin.so": "1b043df22a2e373449c82be0d71a237812ac32a4c59ca6f122c6ab6ea7bfff42",
+      "devel/lib/librotors_gazebo_gps_plugin.so": "4461d9b62983f757c014fc5028f42023b790d748caf6c7ab92f9827c6da4857f",
+      "devel/lib/rotors_control/lee_position_controller_node": "92e8b7bfa357320559ccdd502dc5459976e03e5388c1a563d16561380c3bda98"
+    },
+    "diagnostic_source_files_matched": 8,
+    "migration_verified_against_historical_manifests": {
+      "mode": "clock_startup_hotfix_v1",
+      "changes": {
+        "tools/interface_experiment/ros_io.py": {
+          "before": "20e22059ebadc2b3e041c82b0d8f079ffe14bcafcbbe755acbd32d560175ad20",
+          "after": "8efb3c230897e495544dfde5fd06af47b4f816a7386b087a5ab1bdae67ec9725"
+        },
+        "tools/interface_experiment/run.py": {
+          "before": "35c1a287a9ade18488a6f208eac8e37a2c636a2278aac54c179ad5d77511bd4b",
+          "after": "8dcd1a98a5c9f9d7f03bdc805c7f203f09c6a4f7432de86d7de17cdaab188ce5"
+        },
+        "tools/interface_experiment/tests/test_startup.py": {
+          "before": null,
+          "after": "93c30d42ca7883124dc88e2320dfed8173ffbe6a01cabe27106667a0bea71152"
+        }
+      },
+      "scope": "Startup clock synchronization only; collection semantics unchanged"
+    },
+    "phase1_collection_manifest_matches_phase2": true,
+    "diagnostic_source_report_and_provenance_match": true,
+    "historically_recorded_checkpoint_sha256": "83f8c9646a29d8ade96ac7a327b6923694eace9767fda0a769b0e16a4e5728ea",
+    "checkpoint_bytes_available_locally": false
+  },
+  "syntax": {
+    "python_38_grammar_only": [
+      "tools/interface_experiment/core.py",
+      "tools/interface_experiment/learning.py",
+      "tools/interface_experiment/report.py",
+      "tools/interface_experiment/ros_io.py",
+      "tools/interface_experiment/run.py",
+      "tools/interface_experiment/tests/test_contracts.py",
+      "tools/interface_experiment/tests/test_learning.py",
+      "tools/interface_experiment/tests/test_startup.py",
+      "tools/interface_experiment/worker.py",
+      "tools/interface_diagnostic/diagnose.py",
+      "tools/interface_diagnostic/diagnostic_core.py",
+      "tools/interface_diagnostic/diagnostic_report.py",
+      "tools/interface_diagnostic/diagnostic_ros.py",
+      "tools/interface_diagnostic/diagnostic_worker.py",
+      "tools/interface_diagnostic/tests/test_diagnostic.py",
+      "tools/interface_analysis/audit.py"
+    ],
+    "bash_syntax": [
+      "tools/interface_experiment/run.bash",
+      "tools/interface_diagnostic/run.bash"
+    ],
+    "python38_runtime_executed": false,
+    "documentation_bash_blocks_checked": 10
+  },
+  "help_entries": 3,
+  "diagnostic_failure_path": {
+    "exit_code": 2,
+    "diagnosis": "INCOMPLETE",
+    "report_error_and_bundle_preserved": true,
+    "existing_output_refused_without_overwrite": true,
+    "gazebo_started": false
+  },
+  "final_scope_review": {
+    "imported_files_match_worktree_and_git_objects": 25,
+    "original_input_files_unchanged": 1382,
+    "relative_markdown_links_checked": 28,
+    "files_above_1MiB": [],
+    "high_confidence_credential_patterns_found": [],
+    "existing_src_server_and_provenance_unchanged": true,
+    "diff_check_passed": true,
+    "final_test_suites": {
+      "discovered": 50,
+      "passed": 48,
+      "skipped_no_torch": 2
+    }
+  }
+}
