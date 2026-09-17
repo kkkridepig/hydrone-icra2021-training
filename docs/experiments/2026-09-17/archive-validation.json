@@ -1,0 +1,23 @@
+{
+  "base_commit": "525060e885ac9dc7849af16c8a4c9cc0dbaae897",
+  "protected_imported_files_hash_matched": 25,
+  "historical_snapshots_and_source_unchanged": true,
+  "new_restore_unit_tests": {
+    "run": 8,
+    "passed": 8
+  },
+  "local_restored_files_hash_matched": 1789,
+  "restored_npz_count": 372,
+  "restored_checkpoint_count": 5,
+  "lfs_staged_pointers_match_originals": 5,
+  "archive_total_bytes": 178929393,
+  "archive_text_members_scanned_for_credentials": 1075,
+  "high_confidence_credential_findings": [],
+  "python38_grammar_files_via_python312": 2,
+  "python38_runtime_executed": false,
+  "relative_links_checked": 54,
+  "bash_blocks_checked": 12,
+  "diff_check_passed": true,
+  "checkpoint_deserialized": false,
+  "ros_gazebo_ppu_executed": false
+}

@@ -1,0 +1,26 @@
+{
+  "package": "hydrone-interface-diagnostic-v1",
+  "base_git_commit": "8790a9ea1598c779e38e1fa5eeb3eeec6ca87bcf",
+  "changes": "Additive tools/interface_diagnostic only; requires successful existing clock-fixed phase2 source and weights",
+  "local_validation": {
+    "new_contract_tests_passed": 17,
+    "original_contract_tests_passed": 18,
+    "python_3_8_grammar": true,
+    "shell_syntax": true,
+    "failure_report_and_zip": true,
+    "patch_apply_and_tree_identity": true
+  },
+  "server_gazebo_validation": "NOT RUN; must be performed on user server",
+  "sha256": {
+    "tools/interface_diagnostic/README.md": "71135c2789c6174c89f4e67253ac396225cfb91d312539e78f7cbf219f72fb02",
+    "tools/interface_diagnostic/diagnose.py": "d570d1ce22707e2d15a19e54afcbd7eb15ed9d1f4791bc5aa6b412303562feca",
+    "tools/interface_diagnostic/diagnostic_core.py": "3be0f47286714189bdec3f85b66c4c49f87a0c5a900b11fe0f84fe53ae242581",
+    "tools/interface_diagnostic/diagnostic_report.py": "34f92f02a10b515c1bcf8657a41720b3ea47212a7b7b956e05a8165d772821d3",
+    "tools/interface_diagnostic/diagnostic_ros.py": "8a672340e84d80adf950e6ced1d0fc85ffc71a8bd7f1162d5b9307d0d566dbcd",
+    "tools/interface_diagnostic/diagnostic_worker.py": "da266877c9ffa13e099d2b93a1a07c440180020dd464ff62da2fad48912c8fb7",
+    "tools/interface_diagnostic/protocol.json": "fdde70baf1e3fb25468496b04a4d014369636942ad7f45db9999dd7d0e835d46",
+    "tools/interface_diagnostic/run.bash": "df3b642ba6ebcd987f5511b5dcc30a1be5c4a289ddf4dcd59633df0644fba413",
+    "tools/interface_diagnostic/tests/test_diagnostic.py": "ee2831045ed1f54b714dd36651eb280180225f0d141251a4c4dabc1308b19cd5",
+    "interface-diagnostic.patch": "9df4827c284551239f1ae52f3135211032ba91e639c159334a66a75508b6d0fd"
+  }
+}

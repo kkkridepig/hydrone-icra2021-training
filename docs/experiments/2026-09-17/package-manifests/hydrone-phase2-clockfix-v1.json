@@ -1,0 +1,13 @@
+{
+  "base_local_commit": "5cbc8e241561cd0382e3e60c66bac512e5717b1a",
+  "fixed_local_commit": "2a3c6bacc626d33ea18ccecbf10991d5d11f306f",
+  "remote_pushed": false,
+  "regression_tests_passed": 33,
+  "patch_tree_verified": true,
+  "files_sha256": {
+    "tools/interface_experiment/ros_io.py": "8efb3c230897e495544dfde5fd06af47b4f816a7386b087a5ab1bdae67ec9725",
+    "tools/interface_experiment/run.py": "8dcd1a98a5c9f9d7f03bdc805c7f203f09c6a4f7432de86d7de17cdaab188ce5",
+    "tools/interface_experiment/tests/test_startup.py": "93c30d42ca7883124dc88e2320dfed8173ffbe6a01cabe27106667a0bea71152"
+  },
+  "patch_sha256": "43d8211243c9d733bf01aee4945a91c6ff65732a0c54c5224b9329b14e971095"
+}

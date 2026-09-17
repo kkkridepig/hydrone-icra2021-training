@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "date": "2026-09-17",
+  "storage": "Git LFS",
+  "source_code_commit": "525060e885ac9dc7849af16c8a4c9cc0dbaae897",
+  "archives": {
+    "artifacts.zip": {
+      "sha256": "1262e30830fae7041c8dc7ef153433bf5f27b31669691a2088737d68758d0060",
+      "bytes": 178519746,
+      "role": "Complete run backup: four interface runs and DDPG/SAC Stage 1 runs"
+    },
+    "hydrone-diagnostic-audit-20260917.zip": {
+      "sha256": "2d3a773aad580630cb0ae34f73c8ebcdf801fe6db7616ab36d92fd0cdc87f07d",
+      "bytes": 248120,
+      "role": "hydrone-diagnostic-audit-20260917"
+    },
+    "hydrone-interface-diagnostic-v1.zip": {
+      "sha256": "eb69e4fbaf11408620e13d8b0be108640d05e50ef6dcaf35288ead35372d7155",
+      "bytes": 51905,
+      "role": "hydrone-interface-diagnostic-v1"
+    },
+    "hydrone-interface-pilot-v1.zip": {
+      "sha256": "755b2c67591f7d21f0cb0aac4e5718ca003479ed4a84cf530aff7a22318751df",
+      "bytes": 85697,
+      "role": "hydrone-interface-pilot-v1"
+    },
+    "hydrone-phase2-clockfix-v1.zip": {
+      "sha256": "bd4a66a8229be1670ff739b6bbaa41f448f2356008c28ee1ffae58a52b48128f",
+      "bytes": 23925,
+      "role": "hydrone-phase2-clockfix-v1"
+    }
+  },
+  "run_member_inventory": "docs/experiments/2026-09-17/supplement-inventory.json",
+  "source_member_inventory": "docs/experiments/2026-09-17/original-zip-inventory.json",
+  "artifact_member_prefix": "mnt/workspace/hydrone_ws/artifacts/",
+  "missing_original_environment": {
+    "devel_build_files": 40,
+    "user_cannot_supply_original_devel": true,
+    "system_plugins": [
+      "/opt/ros/noetic/lib/libgazebo_ros_api_plugin.so",
+      "/opt/ros/noetic/lib/libgazebo_ros_camera.so"
+    ]
+  },
+  "restore_does_not_validate_new_simulator_build": true
+}
