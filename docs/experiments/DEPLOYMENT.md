@@ -29,7 +29,7 @@ python -c 'import sys, torch; print(sys.version); print(torch.__version__); prin
 
 ## 获取已整理源码，先保留现有服务器工作树
 
-分支 `experiment/interface-mechanism-audit` 发布后，可拉取并在**新的、尚不存在的目录**只读审查：
+分支 `experiment/interface-mechanism-audit` 已发布，可拉取并在**新的、尚不存在的目录**只读审查：
 
 ```bash
 cd /mnt/workspace/hydrone_ws
@@ -95,7 +95,7 @@ assert legacy_run.sha(checkpoint) == expected, 'Not the model recorded by the su
 PY
 ```
 
-这里的历史权重 hash 来自 diagnostic provenance；本次输入不含权重，尚未在本地读取权重验证。若成功目录命名不同，只调整 `source`。不能把 `evidence.zip` 当成该目录；必须存在 `config.json`、完成 120 回合的 `report.json`、`provenance.json` 与 `models/seed_0/model.pt`。
+这里的权重 hash 来自 diagnostic provenance，并已与本次补件的成功 phase2 原模型、diagnostic frozen 副本及首次 phase2 模型逐字节哈希核对一致；尚未加载 checkpoint 执行模型。若成功目录命名不同，只调整 `source`。不能把 `evidence.zip` 当成该目录；必须存在 `config.json`、完成 120 回合的 `report.json`、`provenance.json` 与 `models/seed_0/model.pt`。首次失败 phase2 即使模型字节相同，其 report 为 0 回合/INCOMPLETE，仍不能充当成功来源。
 
 `Sources/build changed since successful phase2` 应据实际差异处理；不要删除检查、编辑历史 provenance 或冒用新构建哈希。代码里原有的复制后校验与运行前后权重哈希检查保持原样。
 
@@ -171,6 +171,8 @@ nohup bash tools/interface_diagnostic/run.bash \
 
 evidence 打包省略 `.pt`/`.npz` 与完整 ROS 日志树。原 phase1 数据、成功模型、运行配置、构建身份及完整日志应保留在持久化盘，并按 [交付物清单](ARTIFACT_INVENTORY.md) 在仓库外归档。模型/数组不进入 Git，也不以 evidence 替代它们。
 
+本次完整备份的 `artifacts.zip` SHA256 是 `1262e30830fae7041c8dc7ef153433bf5f27b31669691a2088737d68758d0060`。归档内的 `mnt/workspace/hydrone_ws/artifacts/` 包含四次界面运行与 `server/` 下的 DDPG/SAC 产物，不包含部署源码、原 `devel` 或系统插件。恢复时先在新的隔离目录检查成员路径及 [补件清单](2026-09-17/supplement-inventory.json)，不直接解压覆盖 `/mnt/workspace/hydrone_ws`，也不把 `server/` 下各运行目录的 `checkpoint.pt` 用作界面模型。
+
 ## 离线重算
 
 已有 numpy/matplotlib 的独立分析环境即可，不需要 ROS 或 torch。选择与证据目录不同、尚不存在的输出目录，因为原审计脚本允许覆盖自身输出文件。
@@ -181,4 +183,4 @@ python tools/interface_analysis/audit.py \
   /path/to/diagnostic-evidence.zip /path/to/new-audit-output
 ```
 
-若仅有解压目录，可按原相对路径重新 ZIP 后运行，须将它标注为新容器并记录新 SHA256，不能借用历史 ZIP hash。审计只验证 manifest 中存在的文件，允许省略 NPZ；本次对真实日志的重算不等于重新仿真或模型推理。原审计的三个浮点末位差异及原件缺口见 [验证记录](VALIDATION.md)。
+现在可直接使用 `artifacts/interface_diagnostic_v1/evidence.zip`，其 SHA256 已确认是历史原件的 `ac537c9f5c489d93ea5a601796a73f5126136ddf6aa88a217d709a5b473ba21e`。其他场景若只有解压目录，可以重打包，但须标注为新容器并记录新 hash。原 audit.py 只校验 ZIP 内的 manifest 文件、允许省略 NPZ；本次另外读取完整目录核验了全部 372 个 NPZ。日志重算和数组核验都不等于重新仿真或模型推理，细节见 [验证记录](VALIDATION.md)。

@@ -1,0 +1,145 @@
+{
+  "runtime": "3.12.0 (tags/v3.12.0:0fb18b0, Oct  2 2023, 13:03:39) [MSC v.1935 64 bit (AMD64)]",
+  "numpy": "2.5.2",
+  "torch_available": false,
+  "npz_validation": {
+    "interface_phase1_v1": {
+      "npz_files": 48,
+      "frames": 4969,
+      "allow_pickle": false,
+      "schemas": [
+        [
+          "actions",
+          "heights",
+          "history_rows",
+          "images",
+          "input_dt",
+          "labels",
+          "sensors"
+        ]
+      ],
+      "shape_dtype_and_finiteness_passed": true,
+      "metadata_and_log_lengths_matched": true,
+      "png_previews_match_npz": 48,
+      "action_height_label_history_and_dt_rows_matched": 4969
+    },
+    "interface_phase2_v2_clockfix": {
+      "npz_files": 120,
+      "frames": 14773,
+      "allow_pickle": false,
+      "schemas": [
+        [
+          "actions",
+          "heights",
+          "history_rows",
+          "images",
+          "input_dt",
+          "labels",
+          "sensors"
+        ]
+      ],
+      "shape_dtype_and_finiteness_passed": true,
+      "metadata_and_log_lengths_matched": true,
+      "png_previews_match_npz": 120,
+      "action_height_label_history_and_dt_rows_matched": 14773
+    },
+    "interface_diagnostic_v1": {
+      "npz_files": 204,
+      "frames": 20981,
+      "allow_pickle": false,
+      "schemas": [
+        [
+          "images"
+        ]
+      ],
+      "shape_dtype_and_finiteness_passed": true,
+      "metadata_and_log_lengths_matched": true,
+      "png_previews_match_npz": 204,
+      "action_height_label_history_and_dt_rows_matched": 0
+    }
+  },
+  "total_npz": 372,
+  "audit_original_zip": {
+    "input_sha256": "ac537c9f5c489d93ea5a601796a73f5126136ddf6aa88a217d709a5b473ba21e",
+    "calibration_episodes": 36,
+    "test_episodes": 168,
+    "failures": 20,
+    "only_differences_from_historical_audit": [
+      {
+        "path": "/failures/7/min_goal_distance_m",
+        "historical": 0.2086917954918127,
+        "recomputed": 0.20869179549181266,
+        "absolute_delta": 2.7755575615628914e-17
+      },
+      {
+        "path": "/failures/17/closest_xy_error_m",
+        "historical": 0.21062137654630253,
+        "recomputed": 0.2106213765463025,
+        "absolute_delta": 2.7755575615628914e-17
+      },
+      {
+        "path": "/failures/18/closest_xy_error_m",
+        "historical": 0.2061578023766439,
+        "recomputed": 0.20615780237664394,
+        "absolute_delta": 2.7755575615628914e-17
+      }
+    ]
+  },
+  "server_runs": {
+    "ddpg_stage1_seed0_20260907T085154643124Z": {
+      "algorithm": "ddpg",
+      "stage": 1,
+      "seed": 0,
+      "record_kinds": {
+        "training": 1000,
+        "deterministic_evaluation": 40
+      },
+      "records": 1040,
+      "training_episodes": 1000,
+      "training_steps_recomputed": 177443,
+      "reported_status": "completed",
+      "historically_reported_validation": "passed",
+      "historically_reported_gradient_updates": 177188,
+      "summary_matches_episode_rows": true,
+      "checkpoint_loaded_or_executed": false,
+      "claim": "Historical execution completion only; not a convergence or reproduction claim"
+    },
+    "sac_stage1_seed0_20260908T012832492338Z": {
+      "algorithm": "sac",
+      "stage": 1,
+      "seed": 0,
+      "record_kinds": {
+        "training": 1000,
+        "deterministic_evaluation": 40
+      },
+      "records": 1040,
+      "training_episodes": 1000,
+      "training_steps_recomputed": 497866,
+      "reported_status": "completed",
+      "historically_reported_validation": "passed",
+      "historically_reported_gradient_updates": 497611,
+      "summary_matches_episode_rows": true,
+      "checkpoint_loaded_or_executed": false,
+      "claim": "Historical execution completion only; not a convergence or reproduction claim"
+    }
+  },
+  "ros_gazebo_ppu_executed": false,
+  "checkpoint_deserialized": false,
+  "final_scope_review": {
+    "base_commit": "fca44f27a39a6fa0c51faa17967519fabb083eb2",
+    "changed_file_count": 8,
+    "imported_files_match_worktree_and_git_objects": 25,
+    "original_input_files_unchanged": 1382,
+    "supplement_input_files_unchanged": 1789,
+    "outer_archive_hash_unchanged": true,
+    "historical_snapshots_unchanged": true,
+    "runtime_source_and_provenance_unchanged": true,
+    "relative_markdown_links_checked": 36,
+    "updated_document_bash_blocks_checked": 11,
+    "json_files_parsed": 12,
+    "changed_files_utf8_without_bom_and_lf": true,
+    "files_above_1MiB": [],
+    "high_confidence_credential_patterns_found": [],
+    "diff_check_passed": true
+  }
+}

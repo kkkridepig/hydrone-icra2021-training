@@ -4,11 +4,11 @@
 
 ## 证据范围
 
-本次读取了四类源码/报告解压目录和四组 evidence 解压目录。原始 ZIP 不在输入中。证据的逐文件身份见 [交付物清单](ARTIFACT_INVENTORY.md) 和 [机器可读清单](2026-09-17/input-inventory.json)。
+首轮读取了四类源码/报告解压目录和四组 evidence 解压目录；随后收到 `artifacts.zip` 及其解压目录，补齐四个原始 evidence ZIP、模型、372 个 NPZ、完整运行日志和 DDPG/SAC 产物。源码部署包的原 ZIP 仍缺。首轮身份见 [初始清单](2026-09-17/input-inventory.json)，当前补件身份见 [补件清单](2026-09-17/supplement-inventory.json) 和 [交付物说明](ARTIFACT_INVENTORY.md)。
 
-phase1、失败 phase2、成功 phase2 的报告在证据副本上重算；诊断使用原 `audit.py` 对保持所有文件字节的本地重打包容器重算。结果见 [验证记录](VALIDATION.md)、[重算审计](2026-09-17/audit-recomputed.json)。[原审计报告](2026-09-17/audit-original/REPORT.md) 和原审计 JSON 按历史原件保留，其输入 ZIP 名称与 hash 是历史引用，不能冒称本次已收到该 ZIP。
+phase1、失败 phase2、成功 phase2 的报告在证据副本上重算；首轮诊断用本地重打包容器重算，补件后又用原 `audit.py` 直接读取原 diagnostic evidence ZIP。结果见 [验证记录](VALIDATION.md)、[原 ZIP 重算审计](2026-09-17/audit-original-zip-recomputed.json)。[原审计报告](2026-09-17/audit-original/REPORT.md) 和原 JSON 保留历史原件；本次原 ZIP 的 SHA256 已实算吻合原审计的 `input_sha256`。原模型/frozen 副本身份一致；NPZ 的结构、有限值、日志长度及预览图一致性均已核验，不等于再次运行模型或仿真。
 
-提供的 `HYDRONE_RESEARCH_AND_CODE_REVIEW_20260917.md` 是研究线索来源，不替代逐回合证据。它提及的其他 DDPG 审计、第三方论文附件未包含在这次输入中，因此不在本文扩展其因果结论。
+提供的 `HYDRONE_RESEARCH_AND_CODE_REVIEW_20260917.md` 是研究线索来源，不替代逐回合证据。它提及的其他 DDPG 专项审计、第三方论文附件未包含在这次输入中；新收到的 DDPG/SAC 运行记录仅做完成状态与归档核验，不据此扩展失败因果结论。
 
 ## 候选研究问题与实际实现
 
@@ -55,6 +55,8 @@ Hydrone 原 DDPG/SAC、其他视觉导航与跨介质硬件工作是平台和基
 
 旧 phase1 与新 phase2 的兼容性来自原 clockfix 中的显式白名单迁移；不是手改旧数据 hash。实际迁移前后身份与出处见交付物清单。
 
+新增 `server/` 产物中，DDPG 与 SAC 均为 Stage 1/seed0，各有 1000 个 training 记录和 40 个 deterministic_evaluation 记录。逐回合训练步数求和分别为 177443、497866，与 summary 一致；原 validation 记录为 passed。这些是历史执行完成记录，不是本次重新验证梯度、模型收敛或论文性能，也不改变上述界面教师是规则教师的事实。
+
 ## 最新冻结诊断的负结果
 
 各策略均为 24 回合，168 回合全部 `crossed=true`。查询数为动作专家总调用数；teacher 不调用学习专家。
@@ -81,7 +83,7 @@ mild 按预定顺序入选，教师横向偏离增量约 5.88 cm，峰值倾角�
 
 原成功条件要求已经跨界、距目标不超过 0.18 m、速度低于 0.12 m/s、roll/pitch 小于 0.2 rad，并保持 1 秒，随后立即终止。short 的 24/24 证明符合原到达标准，没有证明长期停稳；teacher 也未通过该批记录证明长期保持。
 
-clean/seed201 的 separated 末次决策真值高度约 -1.146 m、估计约 -0.882 m、目标约 -0.707 m，却仍给出约 -0.238 m/s 向下参考。视觉误差与专家终端反馈都需要检查，不能仅靠日志断定唯一根因。原权重未在输入中，因此本次未做反事实模型推理。
+clean/seed201 的 separated 末次决策真值高度约 -1.146 m、估计约 -0.882 m、目标约 -0.707 m，却仍给出约 -0.238 m/s 向下参考。视觉误差与专家终端反馈都需要检查，不能仅靠日志断定唯一根因。补件已提供并核验原权重字节；本地仍没有 torch，未加载 checkpoint、未做反事实模型推理，也未安装普通 torch 替代运行时。
 
 物理边界包括保留的电机系数、浮力/阻尼简化、未验证的水面视觉与有限施力服务语义。真实 VIO、实机泛化、复杂避障、多个训练种子及新场景上的确认性验证均未完成。
 

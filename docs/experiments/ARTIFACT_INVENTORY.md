@@ -4,11 +4,11 @@
 
 ## 接收形式与仓库基线
 
-实际收到的是下列已解压目录，**没有任何原始 ZIP 文件**。因此所有原 ZIP 的 SHA256 均为未知，未执行或声称原 ZIP 解压/路径穿越检查。目录内未发现链接或越界路径；补丁中的目标均在对应实验目录内。临时重打包 evidence 另行校验了路径、重复成员与 CRC，但它不替代原 ZIP。
+首轮只收到下列已解压目录，没有原始 ZIP，因此最初不声明容器 SHA256 或原 ZIP 安全性。随后补件提供了 `artifacts.zip`、四次实验的原始 `evidence.zip`、完整数组/模型与 server 产物，已完成原件核验，详见下节。**三个源码部署包及离线审计交付包的原 ZIP 仍缺**，不能把四个 evidence ZIP 当作四个源码交付包。
 
 初始目录是附件区，不是 Git 工作树。新克隆隔离 checkout 后，`git status` 干净；仓库内未找到 `AGENTS.md`，按任务提供的全局说明执行。`origin/main` 与 HEAD 均为 `8790a9ea1598c779e38e1fa5eeb3eeec6ca87bcf`，与旧实验基线无差异，没有回滚 main。工作分支为 `experiment/interface-mechanism-audit`。
 
-[input-inventory.json](2026-09-17/input-inventory.json) 对 8 个输入目录的 **1382 个文件**逐一记录相对路径、字节数和 SHA256。下表的“目录清单哈希”是对按路径排序的 `文件SHA256 + 两个空格 + 相对路径 + LF` 拼接文本计算 SHA256，**不是 ZIP 哈希**。
+[input-inventory.json](2026-09-17/input-inventory.json) 是首轮快照，对 8 个输入目录的 **1382 个文件**逐一记录相对路径、字节数和 SHA256；其中 `original_zip_sha256=null` 表示当时尚未收到，当前原件信息由 [supplement-inventory.json](2026-09-17/supplement-inventory.json) 补充，不改写历史快照。下表的“目录清单哈希”是对按路径排序的 `文件SHA256 + 两个空格 + 相对路径 + LF` 拼接文本计算 SHA256，**不是 ZIP 哈希**。
 
 | 实际目录 | 文件数 | 字节数 | 身份与职责 |
 |---|---:|---:|---|
@@ -33,6 +33,39 @@
 | `hydrone-interface-diagnostic-v1_evidence` | `8ad396b0d3026551f522dd2aca190102e188ae3cb25ce6321b45834fc3cfad40` |
 
 另有研究总结 `HYDRONE_RESEARCH_AND_CODE_REVIEW_20260917.md`，SHA256 为 `a5177525c42e06b5ef00f6f8f2f9c081ea82be98b05b7de3c4acd8b9f4270df5`。它提供解释线索；源码与实验数值仍以实际文件为准，没有把总结中的旧权限说明或缺包说明当成当前状态。
+
+## 补件：原 evidence ZIP、完整运行产物与 server 归档
+
+实际本地位置为 `F:/hydrone_train/artifacts/mnt/workspace/hydrone_ws/artifacts`，同级原始归档为 `F:/hydrone_train/artifacts.zip`。后者共 178519746 字节，SHA256：
+
+```text
+1262e30830fae7041c8dc7ef153433bf5f27b31669691a2088737d68758d0060
+```
+
+外层 ZIP 有 1825 个成员（1789 个文件、36 个目录），解压后文件合计 323827839 字节。所有文件与用户提供的解压目录逐字节一致。外层 ZIP 与四个 evidence ZIP 均先检查路径穿越、重复/大小写冲突、链接/特殊文件及加密成员，再解压至仓库外独立临时目录；全量流读取通过 CRC，未覆盖工作树或原输入。
+
+| 原 ZIP 的归档内位置（省略共同 artifacts 前缀） | 字节数 | 文件数 | 实算 SHA256 |
+|---|---:|---:|---|
+| `interface_phase1_v1/evidence.zip` | 2460332 | 206 | `aec3c35aa88951667b212ac9b76bf2d6e0fdc99d675651bce7425aadfeb6c241` |
+| `interface_phase2_v1/evidence.zip` | 48238 | 15 | `40e1dcdff31b3d28b076d6e8890a43399c7cc7f1ac164d9a038329d4bf77c816` |
+| `interface_phase2_v2_clockfix/evidence.zip` | 7712038 | 495 | `fee0a4ec92bf1ba835425ef55099eea9706e25b1bd58bd668d40d1df3e413a20` |
+| `interface_diagnostic_v1/evidence.zip` | 10417764 | 626 | `ac537c9f5c489d93ea5a601796a73f5126136ddf6aa88a217d709a5b473ba21e` |
+
+四个 ZIP 分别与首轮 `phase1_evidence`、`phase2_evidence`、`第三次_evidence`、`hydrone-interface-diagnostic-v1_evidence` 的**全部文件集合和字节**一致，身份由内容确认。diagnostic ZIP 的 SHA256 与历史 audit.json 的 input_sha256 完全相同，原容器缺口已补齐。此次又直接用原 ZIP 运行已入库的 audit.py，得到 [原 ZIP 重算结果](2026-09-17/audit-original-zip-recomputed.json)。首轮重打包结果仍保留，不将其换名冒充原件。
+
+| 完整运行目录 | 文件数 | 本轮新增核验 |
+|---|---:|---|
+| `interface_phase1_v1` | 267 | 48 个 NPZ；完整 dataset_manifest 的 240 项全部匹配 |
+| `interface_phase2_v1` | 29 | 首次失败 phase2 模型和完整启动日志；评估仍是 0 回合 |
+| `interface_phase2_v2_clockfix` | 629 | 成功模型、120 个评估 NPZ、原日志/报告 |
+| `interface_diagnostic_v1` | 844 | frozen 模型、204 个 NPZ；完整 evidence_manifest 的 816 项全部匹配 |
+| `server` | 20 | DDPG/SAC 各一个 Stage 1/seed0 运行目录，含 checkpoint、配置、manifest、validation 与日志 |
+
+外层归档没有 `.py`、`.patch`、`.bash` 或 `PACKAGE_MANIFEST.json`，它是**运行产物备份**，没有新的部署代码要应用。其 1789 个文件的路径、大小和 hash 都在 supplement-inventory.json；只提交该清单、小型验证汇总与审计 JSON，不把 ZIP、模型、NPZ 或长日志提交 Git。此次文档/清单提交可用 `git log -- docs/experiments/2026-09-17/supplement-inventory.json` 精确追溯，原四类代码提交保持不变。
+
+三个界面模型文件均为 237757 字节，SHA256 均为 `83f8c9646a29d8ade96ac7a327b6923694eace9767fda0a769b0e16a4e5728ea`：首次 phase2 的 `models/seed_0/model.pt`、成功 clockfix phase2 的同名模型、diagnostic 的 `frozen/model.pt`。这证明本次收到的字节与历史 diagnostic provenance 对应；未加载 checkpoint 推理。模型相同不把首次失败 phase2 的 report 变成成功来源。
+
+`server/` 中两次运行均有 1000 个训练回合＋40 个确定性评估记录，训练步数重新求和分别为 DDPG 177443、SAC 497866；与 summary/validation 一致。DDPG checkpoint 为 42763179 字节、SHA256 `e4705ee88831a16a57f9437ffd29576b9cc1daa02388dae7720f8388622ddde5`；SAC checkpoint 为 44911025 字节、SHA256 `2ee358e7243bbf4dbaa67141e8c0c6db9eec0808e40ed3c147076c86f8f899f3`。记录历史执行完成，不宣称本次复验梯度、策略收敛或论文指标，也不将它们作为界面教师模型。
 
 ## 真实应用顺序与提交
 
@@ -123,10 +156,13 @@ diagnostic 顶层 `DEPLOY.md` 是部署文档副本，外部保留；manifest �
 | `accelerator.json` | 该次历史 PPU/torch 算子检查记录；不是当前服务器探测 |
 | `sensor_preflight.json`、`physics_inventory.json`、`expanded_robot.urdf` | 传感控制链与实际展开模型检查 |
 | `ERROR.txt`、`gazebo.log`、`worker.log`、`xacro.log` | 故障/启动/退出证据；失败运行也保留 |
+| 完整目录中的 `*.npz` | 48 个 phase1、120 个 phase2 评估、204 个 diagnostic 图像数组；全部外部归档 |
+| `models/seed_0/model.pt`、`frozen/model.pt` | 原界面模型与冻结副本；本轮已核验字节 hash，不加入 Git |
+| `server/*/checkpoint.pt`、`config.yaml`、`run/`、`validation.json` | 旧 DDPG/SAC 独立实验产物；只归档身份与执行计数，不覆盖运行入口 |
 
 建议把四组 evidence、四类交付原目录、研究总结及未来补齐的原 ZIP，连同本清单，归档在受控持久化存储的独立 `interface-20260917` 目录，并登记实际存储 URI 与访问责任人；本次未创建外部上传，也不虚构存储地址。源文件清单允许之后复核归档内容，不能恢复已缺失的数据字节。
 
-服务器必须另存完整 `artifacts/interface_phase1_v1`（包括 48 个训练 NPZ）、失败 phase2、成功 `artifacts/interface_phase2_v2_clockfix`（含权重）、完整 diagnostic（含 204 个 NPZ）。这些、`.venvs`、`build/devel/install`、长日志、论文和缓存不提交。原输入 evidence 中没有任何 `.pt` 或 `.npz`。
+服务器必须另存完整 `artifacts/interface_phase1_v1`（包括 48 个训练 NPZ）、失败 phase2、成功 `artifacts/interface_phase2_v2_clockfix`（含权重）、完整 diagnostic（含 204 个 NPZ）。这些、`.venvs`、`build/devel/install`、长日志、论文和缓存不提交。四个 evidence ZIP 本身仍不含 `.pt` 或 `.npz`；本轮在外层 artifacts.zip 的完整运行目录中补齐了这些字节，不能混淆两层归档。
 
 ## clockfix 的真实身份迁移
 
@@ -140,12 +176,13 @@ diagnostic 顶层 `DEPLOY.md` 是部署文档副本，外部保留；manifest �
 
 理由是 `rospy.init_node` 前等待 `/use_sim_time=true`，初始化后等待正 `/clock`，仅在启动阶段重试 `SensorsNotReady`。不放宽运行时反馈阈值、不替换时间戳、不改变训练、动作或物理语义。本次用原函数处理 phase1/成功 phase2 两份历史 manifest，返回值与成功证据中的 `clock_startup_hotfix_v1` 记录完全相同。
 
-成功 phase2 的 `collection_sha256` 与 phase1 的 240 项数据清单完全相同；本地可实际校验其中 192 个文件，48 个 NPZ 未提供。诊断证据对成功 phase2 的 report/provenance 哈希也与 `第三次_evidence` 对应文件完全一致。两份 source_sha256 相同，共 336 项；本地匹配 296 项，40 项服务器构建产物待服务器验证。
+成功 phase2 的 `collection_sha256` 与 phase1 的 240 项数据清单完全相同；首轮验证了 192 项，补件后已实读并校验全部 240 项（含 48 个 NPZ）。诊断 evidence_manifest 的 816 项也已全部匹配。诊断证据对成功 phase2 的 report/provenance 哈希与对应完整目录一致。两份 source_sha256 相同，共 336 项；本地匹配 296 项，40 项服务器构建产物仍未提供，不能用模型或数据文件替代构建验证。
 
 ## 原件缺口与身份边界
 
 - 需要补齐与三个源码目录及审计目录对应的四个**原始 ZIP**，才能核验容器 SHA256 与原始成员路径。已知目标包括 `hydrone-interface-diagnostic-v1.zip`、`hydrone-diagnostic-audit-20260917.zip`；前两个 ZIP 的精确原文件名仍应以实际补件为准。
-- 四组 evidence 的原 ZIP 均未提供。旧 audit.json 引用的原诊断 ZIP SHA256 是 `ac537c9f5c489d93ea5a601796a73f5126136ddf6aa88a217d709a5b473ba21e`，此处仅引用已有审计。
-- 本次临时重打包包含 626 个文件，SHA256 为 `9e967c9fd2077c3cd7787dfec569d88295be302e44cf4f2c0c6a34d20c9d5b37`。审计通过 612 个 manifested 回合文件，允许省略的 204 个 NPZ；这个新容器不提交 Git。
-- 原成功权重应仍在 `artifacts/interface_phase2_v2_clockfix/models/seed_0/model.pt`。诊断 provenance 记录其 SHA256 为 `83f8c9646a29d8ade96ac7a327b6923694eace9767fda0a769b0e16a4e5728ea`；本次没有权重字节，不能声称已独立验证该权重。
-- 本次可核实的源码集成与日志重算已完成，原 ZIP 容器身份、权重/NPZ 和服务器构建验证尚不完整；没有凭记忆重写缺失补丁或伪造任何哈希。
+- 四组 evidence 的原 ZIP 已补齐并逐一核验；诊断 ZIP 的实算 hash 已与旧 audit.json 相同，不再是仅引用。
+- 首轮临时重打包 SHA256 为 `9e967c9fd2077c3cd7787dfec569d88295be302e44cf4f2c0c6a34d20c9d5b37`，只保留作为首轮验证过程说明；本轮审计直接读取原 ZIP。两者的 ZIP 内核验均为 612 项，完整目录另核验 816 项。
+- 原成功模型与 frozen 副本、全部 372 个 NPZ 已提供并核验。模型加载、CPU/PPU 网络执行和反事实推理仍未做，本地无 torch；无需再次索取这些已收到的数据文件。
+- 仍缺 40 项 `devel` 构建产物（具体路径和历史 hash 见 [首轮验证快照](2026-09-17/validation-results.json) 的 `provenance.missing_server_build_files`），以及历史 diagnostic provenance 监控的 `/opt/ros/noetic/lib/libgazebo_ros_api_plugin.so`、`libgazebo_ros_camera.so` 字节；它们属于服务器身份核验，不应提交 Git。
+- 源码与日志整理已完成。源码/审计交付包的原 ZIP 容器身份，以及原服务器构建/运行验证仍不完整；没有重写缺失补丁、修改历史 provenance 或伪造 hash。

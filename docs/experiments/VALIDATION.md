@@ -2,7 +2,44 @@
 
 日期：2026-09-17。本次实际执行环境为 Windows、Python 3.12.0、NumPy 2.5.2、Git for Windows 2.53.0。绘图使用仓库外临时 venv 中的 matplotlib 3.11.2。未安装 torch，未连接或更改 PPU 服务器，未启动 Gazebo 训练。
 
-## 实际执行结果
+## 补件后的实际验证
+
+后续输入为 `artifacts.zip` 和 `artifacts/mnt/workspace/hydrone_ws/artifacts/`。本轮只补充原件/数组/模型字节核验、原 ZIP 审计和记录，不修改受 provenance 监控的运行源码；首轮源码契约测试结果保留，未为累计通过数重复执行。机器结果见 [supplement-validation.json](2026-09-17/supplement-validation.json)，文件清单与容器身份见 [supplement-inventory.json](2026-09-17/supplement-inventory.json)。
+
+| 本轮检查 | 实际结果 |
+|---|---|
+| 仓库状态与远端 | 本轮开始工作树干净；重新 fetch 后 main 仍为 `8790a9e`，工作分支仍为首轮的 `fca44f2`，继续原草稿 PR |
+| 原容器安全性 | 外层 artifacts.zip 加四个 evidence ZIP，共 5 个；路径穿越、重复/大小写冲突、链接/特殊文件、加密成员检查无异常；隔离解压并全量读取通过 CRC |
+| 完整归档身份 | 外层 ZIP 为 178519746 字节，SHA256 `1262e30830fae7041c8dc7ef153433bf5f27b31669691a2088737d68758d0060`；1825 成员中有 1789 文件，与提供的解压目录全部逐字节一致 |
+| 四组 evidence 对应 | 206/15/495/626 个成员分别与首轮四组 evidence 的文件集合/hash 完全一致；无需重套源码补丁 |
+| 历史原诊断 ZIP | 实算 SHA256 为 `ac537c9f5c489d93ea5a601796a73f5126136ddf6aa88a217d709a5b473ba21e`，吻合历史 audit.json，不再只是历史引用 |
+| 原模型字节 | 首次 phase2、成功 clockfix phase2 和 diagnostic frozen 三个模型均为 237757 字节，SHA256 `83f8c9646a29d8ade96ac7a327b6923694eace9767fda0a769b0e16a4e5728ea`，与 provenance 相同 |
+| 完整数据 manifest | phase1 的 240 项全部匹配，含 48 个 NPZ；diagnostic 的 816 项全部匹配，含 204 个 NPZ |
+| NPZ 结构与实读 | `np.load(..., allow_pickle=False)` 读取全部 372 个 NPZ；维度/dtype/有限值、元数据 steps 与日志长度全部通过 |
+| 图像与预览 | 48/120/204 个 NPZ 分别含 4969/14773/20981 帧，均为 `(N,48,48,3)` uint8；372 张 PNG 预览与数组选帧逐像素一致 |
+| phase1/phase2 数值对应 | 共 19742 行；actions/heights/labels 与真实逐步日志完全一致；input_dt 与前一时刻一致；history_rows 由原函数从 sensors/前一动作重算一致 |
+| diagnostic NPZ 内容边界 | 原代码只保存 images；204 份 NPZ 的动作/标签核对仍依赖原 JSONL，不能冒称 NPZ 包含这些字段 |
+| 原 ZIP 审计 | 使用已入库的原 audit.py 直接处理 diagnostic 原 evidence.zip；36 校准＋168 测试、20 次失败，计数/选择/查询/事件统计与历史一致 |
+| server DDPG/SAC | 各 1040 条记录＝1000 training＋40 deterministic_evaluation；训练 episode 序号完整；步数实算 DDPG 177443、SAC 497866，与 summary/validation 一致 |
+| checkpoint 使用边界 | 5 个 `.pt`（界面三份、DDPG/SAC 两份）均计算 hash；没有反序列化、执行推理、重训或复验梯度 |
+
+372 个 NPZ 中，phase1/成功 phase2 包含 images、history_rows、heights、labels、sensors、actions、input_dt；diagnostic 仅包含 images。首次失败 phase2 没有评估 NPZ，与其 0 回合结果一致。上述检查是完整性与接口一致性验证，不证明相机物理正确性、策略性能或新实验结果。
+
+本轮实际审计命令（从仓库根目录，以已有独立 numpy/matplotlib 环境执行）：
+
+```bash
+python tools/interface_analysis/audit.py \
+  ../artifacts/mnt/workspace/hydrone_ws/artifacts/interface_diagnostic_v1/evidence.zip \
+  ../.migration-work/supplement-20260917/audit-original-zip
+```
+
+[原 ZIP 重算 JSON](2026-09-17/audit-original-zip-recomputed.json) 的 input_sha256 已与历史结果相同；其余差异只剩三个距离值各 `2.7755575615628914e-17` 的浮点尾差。所有方法计数、查询数、事件头计数与研究结论不变。没有用 FixtureEnv 或合成数组冒充真实回合。
+
+补件中没有 `.py`/`.patch`/`.bash`/`PACKAGE_MANIFEST.json`，属于产物备份，因此没有新增源码应用步骤。全部运行源码/既有 manifest 与首轮提交字节保持一致，原件本身不入 Git；本轮只提交三个派生 JSON 及 README/四份文档更新。源码交付 ZIP 和服务器构建身份的剩余缺口见文末。
+
+本轮最终审查：25 个导入文件的工作树/Git 对象 hash 与原包一致；首轮 1382 个输入文件、本轮 1789 个输入文件及外层 ZIP 未变；历史清单/验证/重打包审计快照未改写。36 个相对 Markdown 链接、更新文档中的 11 个 bash 代码块语法和分支内 12 个 JSON 解析均通过。8 个变更文件为 UTF-8 无 BOM、LF；`git diff --check` 通过，高置信凭据模式检查无发现，无单文件超过 1 MiB。没有改变 `tools/`、`src/` 或 provenance。
+
+## 首轮已执行结果（补件前）
 
 | 检查 | 结果与边界 |
 |---|---|
@@ -33,7 +70,7 @@
 
 以上单元测试的模拟 ROS/FixtureEnv/合成数组只检查软件契约，不属于任何 Gazebo 实验成功证据。48/48、120/120 和诊断数值来自用户提供的真实逐回合文件，来源没有混用。
 
-## 审计重算的具体身份
+## 首轮重打包审计的身份（历史过程保留）
 
 原 `audit.py` 原样执行，输入是将收到的 diagnostic evidence 目录按原相对路径打包的新 ZIP。打包前检查路径与链接，打包后检查 626 个成员、重复路径和 CRC。它是临时适配容器，不提交 Git、不声称是上传原件。
 
@@ -63,15 +100,14 @@ python tools/interface_analysis/audit.py diagnostic-evidence-repacked.zip new-au
 
 新增两份派生 JSON 首次 `git diff --check` 因 Windows CRLF 报尾部空白；只将本次生成的 `audit-recomputed.json` 与 `input-inventory.json` 保存为 LF，再检查通过。原 Python/JSON/launch、原历史报告及包 manifest 没有换行转换。
 
-最终检查包含 `git diff --check`、提交范围/大文件/凭据模式检查、文档相对链接核验，以及提交对象和 checkout 的原件 SHA256 对照。源目录 `src/`、`tools/server/` 和既有 provenance 未修改；没有纳入 venv、构建产物、模型、训练数组、长日志或重复 ZIP。详细机器可读结果见 [validation-results.json](2026-09-17/validation-results.json)。
+首轮最终检查包含 `git diff --check`、提交范围/大文件/凭据模式检查、文档相对链接核验，以及提交对象和 checkout 的原件 SHA256 对照。源目录 `src/`、`tools/server/` 和既有 provenance 未修改；没有纳入 venv、构建产物、模型、训练数组、长日志或重复 ZIP。[validation-results.json](2026-09-17/validation-results.json) 是首轮验证快照，其中“权重不可用”等字段保留当时状态；本轮已补齐的部分以 supplement-validation.json 为准。
 
 ## 未执行或待补齐
 
 - **Python3.8 真实运行、ROS/Gazebo、PPU 算子/梯度、相机/施力/时钟服务时序、完整闭环重跑**：当前是 Windows 离线环境，且本任务未授权自动启动长时训练。部署后的服务器验证按 [DEPLOYMENT.md](DEPLOYMENT.md) 执行。
-- **40 项原构建产物、系统 Gazebo 插件**：只保留历史记录，没有本地字节；不可宣称新构建已兼容原模型/数据。
-- **原 model.pt 的独立 hash 与模型推理**：权重未提供。历史 hash `83f8c9646a29d8ade96ac7a327b6923694eace9767fda0a769b0e16a4e5728ea` 来自 diagnostic provenance；应在原服务器核验。
-- **训练/诊断 NPZ 原字节**：evidence 按原设计省略，不能重训或审核全部相机数组。原清单哈希一致不代表本地读取过缺失数组。
-- **四个交付包与四组 evidence 的原 ZIP 容器**：未提供，包 SHA256、原 ZIP 元数据/成员安全性仍未知。已完成解压内容的核验与迁移，不声明原 ZIP 链条完整。
+- **40 项原构建产物、两个系统 Gazebo 插件**：补件没有 `devel` 或 `/opt/ros/noetic/lib/libgazebo_ros_api_plugin.so`、`libgazebo_ros_camera.so`；只有历史 hash，不能宣称当前服务器构建已验证。
+- **模型运行而非模型字节**：原 model.pt 和 frozen 副本的字节/hash 已核验；本地仍无 torch，尚未加载权重、做 CPU/PPU 推理或反事实检查。原两项网络测试依然是跳过，没有安装普通 torch。
+- **四个源码/审计交付 ZIP**：仍只有其解压目录，部署包的容器 SHA256/原始成员安全性未知。四组 evidence 原 ZIP、完整模型与全部 372 个 NPZ 已补齐，不再列为缺失文件；它们不替代部署包原件。
 - **56 回合、真值/学习高度对照、到达后继续 10 秒**：仅提案，没有代码入口、运行或通过记录。
 
 本次联网读取 ROS Noetic `simtime.py` 确认初始化时依据 `/use_sim_time` 选择时钟的代码背景；[研究状态](RESEARCH_STATUS_20260917.md) 所列五篇近邻的 arXiv 题名/摘要也重新读取。它们不是服务器验证的替代。
