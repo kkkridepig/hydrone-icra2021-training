@@ -1,0 +1,23 @@
+{
+  "base_commit": "8790a9ea1598c779e38e1fa5eeb3eeec6ca87bcf",
+  "local_commit": "5cbc8e241561cd0382e3e60c66bac512e5717b1a",
+  "remote_pushed": false,
+  "patch_recreates_commit_tree": true,
+  "files_sha256": {
+    "tools/interface_experiment/LOCAL_VALIDATION.md": "f807cb231e4d441d37df79fd6e1ad646c9da0930eb4de0636aba6c17bd86068d",
+    "tools/interface_experiment/README.md": "b74be6b3611c815428741072bb09b0f9f57c599b361046d5c97f9907fe608b1d",
+    "tools/interface_experiment/assets/robot.xacro": "6528db5cdb055caeb5042fa9bc54fa8ed06c96d58a7b395fb17057a908fa266b",
+    "tools/interface_experiment/assets/simulation.launch": "d90067c4843590bbbf2939f2919660f43b3af8a492989d89f1a6327f664a5879",
+    "tools/interface_experiment/config.json": "bd07ace2f7f9dee690845db36e6b36af6cd8ee2ed6aaffc83b06221c1edfabc5",
+    "tools/interface_experiment/core.py": "62616cc53a3f80ee12e1bc80b08621fd43772a4dabd784e88971ccae82400d79",
+    "tools/interface_experiment/learning.py": "eb7beec1fd2cf7ddf32b1b6e2b3e5b1d2bb44edeb316dc83e1f84a7cab4a6025",
+    "tools/interface_experiment/report.py": "4d51983170fffa6dc35491c8454e117f6749285d104aca8379bbee59a0dd8564",
+    "tools/interface_experiment/ros_io.py": "20e22059ebadc2b3e041c82b0d8f079ffe14bcafcbbe755acbd32d560175ad20",
+    "tools/interface_experiment/run.bash": "da37a160d09f13673b11be6596eee50ae62a80c2d8752ef4e05685ab308f6aec",
+    "tools/interface_experiment/run.py": "35c1a287a9ade18488a6f208eac8e37a2c636a2278aac54c179ad5d77511bd4b",
+    "tools/interface_experiment/tests/test_contracts.py": "2f939f6a8090da7bbe5309dd8360b2ff34c23b6efdeaf86c9dbcd139312f9d0f",
+    "tools/interface_experiment/tests/test_learning.py": "389ab933aba06addf47d948123895d79a1ea76f55764f5e01c97f3cf1173af37",
+    "tools/interface_experiment/worker.py": "ba3cfc56785ceb1bfe76935909c9f3c4d14f19fe1df2676807a022df5715da28"
+  },
+  "patch_sha256": "8075be5c3653b9458383c828b976ba5bef04445a71851a621d28a86d7d705d78"
+}

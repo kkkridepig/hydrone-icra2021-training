@@ -1,0 +1,6 @@
+# Imported artifacts are identified by SHA256, including their line endings.
+/tools/interface_experiment/** -text
+/tools/interface_diagnostic/** -text
+/tools/interface_analysis/audit.py -text
+/docs/experiments/2026-09-17/audit-original/** -text
+/docs/experiments/2026-09-17/package-manifests/** -text
