@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "calibration_seeds": [10, 11],
+  "test_seeds": [200, 201, 202],
+  "methods": ["teacher", "short", "long", "geometry", "unified", "separated", "oracle"],
+  "conditions": ["clean", "visual", "dynamics", "both"],
+  "trigger_height": 0.3,
+  "profiles": [
+    {"name": "mild", "force_y_N": 1.5, "torque_x_Nm": 0.06, "force_seconds": 0.8, "vision_seconds": 1.2, "image_strength": 0.24},
+    {"name": "moderate", "force_y_N": 3.0, "torque_x_Nm": 0.12, "force_seconds": 1.2, "vision_seconds": 2.0, "image_strength": 0.24}
+  ],
+  "minimum_teacher_peak_increase_deg": 0.5,
+  "minimum_teacher_cross_track_increase_m": 0.02,
+  "recovery_hold_seconds": 0.6,
+  "recovery_roll_pitch_rad": 0.08,
+  "recovery_lateral_speed": 0.04,
+  "maximum_wall_hours": 12
+}
