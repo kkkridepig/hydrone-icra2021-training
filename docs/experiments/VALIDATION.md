@@ -12,11 +12,15 @@
 
 本地另向全新目录实际恢复并独立逐文件复核，1789 项 hash、5 个 `.pt` 和 372 个 NPZ 均匹配。5 个暂存 LFS 指针的 oid/size 与原容器一致；归档中 1075 个文本成员的高置信凭据模式检查无发现；25 个导入源文件和既有历史快照字节未变。新增 2 个 Python 文件通过 Python3.12 的 Python3.8 grammar 检查，54 个文档相对链接及 12 个 bash 代码块语法通过，`git diff --check` 通过。详细记录见 [archive-validation.json](2026-09-17/archive-validation.json)。
 
+归档提交 `e6b47b552edd2a3360f3227738134d252789f3ec` 推送后，从 GitHub 建立独立 clone，确认 5 个文件最初仅为指针、独立 LFS 存储无对象文件，再实际 `git lfs pull` 下载全部 178929393 字节。`git lfs fsck`、5 个容器 hash、40 个源码成员及 1789 个运行成员校验通过；实际恢复后另行读取磁盘文件逐一重算 hash，1789 项完全匹配，含 5 个 `.pt` 和 372 个 NPZ，恢复后 Git 工作树干净。未使用本地 LFS 缓存、文件复制或共享对象库代替下载。机器结果见 [archive-download-validation.json](2026-09-17/archive-download-validation.json)。后续验证文档提交不改变已验收归档或恢复工具。
+
+独立验收辅助脚本第一次把 LFS 自动建立的空层级目录误判为缓存，尚未开始 pull 就退出；检查确认没有对象文件后，仅修正仓库外辅助脚本并继续同一新 clone。原归档、入库恢复工具和身份检查没有因此变化；上述结果来自随后完成的真实远端下载。
+
 归档恢复和原模型重用的能力边界见 [RECOVERY.md](RECOVERY.md)。界面模型没有 optimizer/epoch 续训状态；DDPG/SAC 的两次 Stage 1 已达到 1000 回合目标；缺原构建时冻结诊断的旧身份检查仍可能拒绝新环境。本次不将下载/恢复测试记作 ROS/PPU 验收。
 
-## 补件后的实际验证
+## 运行产物补件阶段的验证（历史记录）
 
-后续输入为 `artifacts.zip` 和 `artifacts/mnt/workspace/hydrone_ws/artifacts/`。本轮只补充原件/数组/模型字节核验、原 ZIP 审计和记录，不修改受 provenance 监控的运行源码；首轮源码契约测试结果保留，未为累计通过数重复执行。机器结果见 [supplement-validation.json](2026-09-17/supplement-validation.json)，文件清单与容器身份见 [supplement-inventory.json](2026-09-17/supplement-inventory.json)。
+这一阶段的输入为 `artifacts.zip` 和 `artifacts/mnt/workspace/hydrone_ws/artifacts/`，补充原件/数组/模型字节核验、原 ZIP 审计和记录，不修改受 provenance 监控的运行源码；首轮源码契约测试结果保留，未为累计通过数重复执行。机器结果见 [supplement-validation.json](2026-09-17/supplement-validation.json)，文件清单与容器身份见 [supplement-inventory.json](2026-09-17/supplement-inventory.json)。最新 LFS 归档阶段见上节。
 
 | 本轮检查 | 实际结果 |
 |---|---|
@@ -47,7 +51,7 @@ python tools/interface_analysis/audit.py \
 
 [原 ZIP 重算 JSON](2026-09-17/audit-original-zip-recomputed.json) 的 input_sha256 已与历史结果相同；其余差异只剩三个距离值各 `2.7755575615628914e-17` 的浮点尾差。所有方法计数、查询数、事件头计数与研究结论不变。没有用 FixtureEnv 或合成数组冒充真实回合。
 
-补件中没有 `.py`/`.patch`/`.bash`/`PACKAGE_MANIFEST.json`，属于产物备份，因此没有新增源码应用步骤。全部运行源码/既有 manifest 与首轮提交字节保持一致，原件本身不入 Git；本轮只提交三个派生 JSON 及 README/四份文档更新。源码交付 ZIP 和服务器构建身份的剩余缺口见文末。
+该次产物补件中没有 `.py`/`.patch`/`.bash`/`PACKAGE_MANIFEST.json`，因此没有新增源码应用步骤。该阶段提交 `525060e` 只包含三个派生 JSON 及 README/四份文档更新，原件当时保留在 Git 外。之后收到源码 ZIP，并按新授权加入 LFS 原备份；运行源码/既有 manifest 始终保持原字节。
 
 本轮最终审查：25 个导入文件的工作树/Git 对象 hash 与原包一致；首轮 1382 个输入文件、本轮 1789 个输入文件及外层 ZIP 未变；历史清单/验证/重打包审计快照未改写。36 个相对 Markdown 链接、更新文档中的 11 个 bash 代码块语法和分支内 12 个 JSON 解析均通过。8 个变更文件为 UTF-8 无 BOM、LF；`git diff --check` 通过，高置信凭据模式检查无发现，无单文件超过 1 MiB。没有改变 `tools/`、`src/` 或 provenance。
 

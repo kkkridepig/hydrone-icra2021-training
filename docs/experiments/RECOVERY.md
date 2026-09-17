@@ -2,6 +2,8 @@
 
 本分支通过 Git LFS 保存原始交付 ZIP 和完整运行备份；代码正常检出，模型/数组从归档恢复。已有权重和数据可以取回，无需为了恢复文件重新训练。恢复文件不等于新机器上的仿真环境已验收。
 
+已在独立 clone、无本地 LFS 对象的条件下从 GitHub 下载并恢复一次：5 个归档和 1789 个恢复文件全部 hash 一致，详见 [远端下载验收](2026-09-17/archive-download-validation.json)。
+
 ## 保存了什么
 
 [归档清单](../../archives/experiments/2026-09-17/manifest.json) 中有 5 个 ZIP，总计 178929393 字节，约 170.6 MiB。Git 提交保存 LFS 指针，大文件实际存储于该 GitHub 仓库的 LFS 存储。需要 `git lfs pull` 获得内容；不能把网页下载的源码 ZIP 或只含 LFS 指针的 checkout 当作完整备份。

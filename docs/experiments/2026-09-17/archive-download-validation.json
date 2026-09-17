@@ -1,0 +1,41 @@
+{
+  "date": "2026-09-17",
+  "remote": "https://github.com/kkkridepig/hydrone-icra2021-training.git",
+  "branch": "experiment/interface-mechanism-audit",
+  "tested_commit": "e6b47b552edd2a3360f3227738134d252789f3ec",
+  "fresh_clone_with_empty_independent_lfs_storage": true,
+  "remote_archives_downloaded": 5,
+  "downloaded_bytes": 178929393,
+  "lfs_fsck_passed": true,
+  "all_container_hashes_match": true,
+  "verify_only": {
+    "archive_count": 5,
+    "source_files_verified": 40,
+    "run_files_verified": 1789,
+    "destination": null,
+    "model_files": 5,
+    "checkpoint_deserialized": false,
+    "simulator_build_validated": false
+  },
+  "restored": {
+    "archive_count": 5,
+    "source_files_verified": 40,
+    "run_files_verified": 1789,
+    "destination": "artifacts",
+    "model_files": 5,
+    "checkpoint_deserialized": false,
+    "simulator_build_validated": false
+  },
+  "restored_files_independently_rehashed": 1789,
+  "restored_npz_files": 372,
+  "restored_pt_files": 5,
+  "fresh_clone_worktree_clean_after_restore": true,
+  "checkpoint_loaded": false,
+  "ros_gazebo_ppu_executed": false,
+  "final_document_review": {
+    "markdown_links_checked": 57,
+    "bash_blocks_checked": 12,
+    "utf8_without_bom_and_lf": true,
+    "diff_check_passed": true
+  }
+}
