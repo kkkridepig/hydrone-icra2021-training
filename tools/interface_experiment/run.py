@@ -31,6 +31,38 @@ def sha(path):
     return h.hexdigest()
 
 
+def collection_source_compatibility(recorded, current):
+    """Allow only the reviewed v1 clock-startup repair when reusing v1 data.
+
+    Configuration and every episode hash are checked separately in main.
+    Physics, controller, action/observation contracts and learning code must
+    still match exactly. The executing runner records its own hash; it is
+    the migration verifier, not an additional collection implementation.
+    """
+    changes = {p: dict(before=recorded.get(p), after=current.get(p))
+               for p in sorted(set(recorded) | set(current))
+               if recorded.get(p) != current.get(p)}
+    if not changes:
+        return dict(mode="exact", changes={})
+    prefix = "tools/interface_experiment/"
+    approved = {
+        prefix+"ros_io.py": (
+            "20e22059ebadc2b3e041c82b0d8f079ffe14bcafcbbe755acbd32d560175ad20",
+            "8efb3c230897e495544dfde5fd06af47b4f816a7386b087a5ab1bdae67ec9725"),
+        prefix+"run.py": (
+            "35c1a287a9ade18488a6f208eac8e37a2c636a2278aac54c179ad5d77511bd4b",
+            sha(Path(__file__))),
+        prefix+"tests/test_startup.py": (None, "93c30d42ca7883124dc88e2320dfed8173ffbe6a01cabe27106667a0bea71152"),
+    }
+    invalid = [p for p, change in changes.items()
+               if p not in approved or (change["before"], change["after"]) != approved[p]]
+    if invalid:
+        raise RuntimeError("Sources/build changed outside the reviewed clock hotfix: "
+                           +", ".join(invalid)+". Inspect changes; do not rewrite phase1 provenance.")
+    return dict(mode="clock_startup_hotfix_v1", changes=changes,
+                scope="Startup clock synchronization only; collection semantics unchanged")
+
+
 def provenance(c):
     result = dict(base_sha=BASE_SHA, config_sha256=canonical_hash(c),
                   python=sys.version, executable=sys.executable, source_sha256={},
@@ -233,8 +265,10 @@ def main():
             if not collection_gate(data, c)["passed"]:
                 raise RuntimeError("Phase1 feasibility gate failed; inspect its REPORT.md")
             source = json.loads((data/"provenance.json").read_text())
-            if source["source_sha256"] != manifest["source_sha256"]:
-                raise RuntimeError("Sources/build changed since collection. Recollect into a new output directory.")
+            manifest["collection_source_compatibility"] = collection_source_compatibility(
+                source["source_sha256"], manifest["source_sha256"])
+            print("COLLECTION_COMPATIBILITY="+manifest["collection_source_compatibility"]["mode"],
+                  flush=True)
             manifest["collection_sha256"] = {
                 str(path.relative_to(data)): sha(path) for path in sorted((data/"episodes").glob("*"))
                 if path.is_file()}

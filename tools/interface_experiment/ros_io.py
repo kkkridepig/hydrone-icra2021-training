@@ -22,6 +22,45 @@ def image_rgb(msg):
     return decode_rgb(msg.height, msg.width, msg.step, msg.encoding, msg.data)
 
 
+class SensorsNotReady(RuntimeError):
+    """Transient sensor freshness failure; retry only during startup."""
+
+
+def initialize_sim_time(seconds=90):
+    """Select ROS simulation time before init_node makes its one-time choice.
+
+    roslaunch and this worker start concurrently. A reachable master alone
+    does not mean roslaunch has uploaded /use_sim_time yet. Never substitute
+    message stamps for /clock or relax sensor-age limits to hide that race.
+    """
+    print("CLOCK_WAIT: waiting for /use_sim_time=true before init_node", flush=True)
+    deadline = time.monotonic()+seconds
+    last = "parameter not available"
+    while time.monotonic() < deadline and not rospy.is_shutdown():
+        try:
+            enabled = rospy.get_param("/use_sim_time", False)
+            if enabled is True:
+                break
+            last = "/use_sim_time="+repr(enabled)
+        except Exception as exc:
+            last = repr(exc)
+        time.sleep(0.05)  # Wall time: simulation time is not initialized yet.
+    else:
+        raise RuntimeError("Simulation-time parameter not ready before init_node: "+last)
+    rospy.init_node("hydrone_interface_pilot", anonymous=False, disable_signals=True)
+    if rospy.rostime.is_wallclock():
+        raise RuntimeError("ROS selected wall time despite /use_sim_time=true; restart worker")
+    print("CLOCK_WAIT: ROS uses simulation time; waiting for positive /clock", flush=True)
+    deadline = time.monotonic()+seconds
+    while time.monotonic() < deadline and not rospy.is_shutdown():
+        now = rospy.Time.now().to_sec()
+        if math.isfinite(now) and now > 0:
+            print("CLOCK_READY: simulation_time=%.6f wallclock=false" % now, flush=True)
+            return
+        time.sleep(0.05)
+    raise RuntimeError("No positive /clock received within startup timeout")
+
+
 class Gazebo:
     def __init__(self, config):
         self.c = config
@@ -39,7 +78,7 @@ class Gazebo:
         self.bridge_error = None
         self.last_published = None
         self.stop_event = threading.Event()
-        rospy.init_node("hydrone_interface_pilot", anonymous=False, disable_signals=True)
+        initialize_sim_time()
         self.pub = rospy.Publisher(self.ns+"/command/trajectory", MultiDOFJointTrajectory,
                                    queue_size=1)
         rospy.Subscriber(self.ns+"/ground_truth/odometry", Odometry,
@@ -78,16 +117,21 @@ class Gazebo:
 
     def wait_ready(self, seconds):
         end = time.monotonic()+seconds
+        last = "waiting for sensors and Lee subscriber"
         while time.monotonic() < end and not rospy.is_shutdown():
             with self.lock:
                 ready = all(x is not None for x in (self.odom, self.imu, self.scan, self.image))
             if self.camera_error:
                 raise RuntimeError(self.camera_error)
             if ready and self.pub.get_num_connections() > 0:
-                self.snapshot()
-                return
+                try:
+                    self.snapshot()
+                    return
+                except SensorsNotReady as exc:
+                    last = str(exc)
             time.sleep(0.05)
-        raise RuntimeError("Missing/frozen odom, IMU, scan, RGB or Lee subscriber: " + str(self.counts))
+        raise RuntimeError("Missing/frozen odom, IMU, scan, RGB or Lee subscriber: "
+                           + str(self.counts)+"; last="+last)
 
     def command(self, action):
         with self.lock:
@@ -159,6 +203,8 @@ class Gazebo:
                                            watchdog=age > 1.0)
 
     def snapshot(self):
+        if rospy.rostime.is_wallclock():
+            raise RuntimeError("ROS wall clock is incompatible with Gazebo sensor timestamps")
         if self.bridge_error:
             raise RuntimeError("Bridge failed: "+self.bridge_error)
         if not self.bridge.is_alive():
@@ -169,14 +215,14 @@ class Gazebo:
             counts = self.counts.copy()
             bridge = copy.deepcopy(self.last_published)
         if any(x is None for x in (o, im, scan, image)):
-            raise RuntimeError("Sensors not ready")
+            raise SensorsNotReady("Sensors not ready")
         now = rospy.Time.now().to_sec()
         ages = dict(odom=now-o.header.stamp.to_sec(), imu=now-im.header.stamp.to_sec(),
                     scan=now-scan.header.stamp.to_sec(), image=now-image.header.stamp.to_sec())
         if any(v < -0.05 for v in ages.values()) or ages["odom"] > 0.5 or ages["imu"] > 0.5:
-            raise RuntimeError("Stale/invalid motion feedback: " + str(ages))
+            raise SensorsNotReady("Stale/invalid motion feedback: " + str(ages))
         if ages["image"] > 1 or ages["scan"] > 1:
-            raise RuntimeError("Stale camera/scan: " + str(ages))
+            raise SensorsNotReady("Stale camera/scan: " + str(ages))
         q = o.pose.pose.orientation
         qv = [q.x, q.y, q.z, q.w]
         p, v = o.pose.pose.position, o.twist.twist.linear
