@@ -2,6 +2,18 @@
 
 日期：2026-09-17。本次实际执行环境为 Windows、Python 3.12.0、NumPy 2.5.2、Git for Windows 2.53.0。绘图使用仓库外临时 venv 中的 matplotlib 3.11.2。未安装 torch，未连接或更改 PPU 服务器，未启动 Gazebo 训练。
 
+## 原源码 ZIP 与可迁移归档
+
+最新收到的四个源码/审计 ZIP 已核验 SHA256、路径/类型/重复/加密成员、CRC，并隔离解压；40 个成员全部与首轮原目录一致，补丁未重复应用。机器清单见 [original-zip-inventory.json](2026-09-17/original-zip-inventory.json)。根目录四个新 evidence ZIP 也分别与完整备份内对应原件 hash 相同，未保存重复副本。
+
+根据用户保存模型以换电脑继续实验的新授权，新增限定目录的 Git LFS 归档与 `tools/interface_archive/restore.py`。原五个归档共 178929393 字节，保存 5 个 `.pt`、372 个 NPZ 与完整运行记录；历史三个验证/输入 JSON 保持原样。原 40 项 `devel` 已确认无法提供，作为环境缺口记录，不再等待用户补件。
+
+新增恢复测试实际运行 `python -m unittest discover -s tools/interface_archive/tests -v`：8 项全部通过，覆盖原字节恢复、已有目录/文件防覆盖、路径穿越/Windows 路径别名、大小写/文件目录冲突、符号链接、成员缺失、hash 错误和 LFS 指针识别。`restore.py --verify-only` 实读校验 5 个原容器、40 个源码文件和 1789 个运行文件通过，不加载 checkpoint。
+
+本地另向全新目录实际恢复并独立逐文件复核，1789 项 hash、5 个 `.pt` 和 372 个 NPZ 均匹配。5 个暂存 LFS 指针的 oid/size 与原容器一致；归档中 1075 个文本成员的高置信凭据模式检查无发现；25 个导入源文件和既有历史快照字节未变。新增 2 个 Python 文件通过 Python3.12 的 Python3.8 grammar 检查，54 个文档相对链接及 12 个 bash 代码块语法通过，`git diff --check` 通过。详细记录见 [archive-validation.json](2026-09-17/archive-validation.json)。
+
+归档恢复和原模型重用的能力边界见 [RECOVERY.md](RECOVERY.md)。界面模型没有 optimizer/epoch 续训状态；DDPG/SAC 的两次 Stage 1 已达到 1000 回合目标；缺原构建时冻结诊断的旧身份检查仍可能拒绝新环境。本次不将下载/恢复测试记作 ROS/PPU 验收。
+
 ## 补件后的实际验证
 
 后续输入为 `artifacts.zip` 和 `artifacts/mnt/workspace/hydrone_ws/artifacts/`。本轮只补充原件/数组/模型字节核验、原 ZIP 审计和记录，不修改受 provenance 监控的运行源码；首轮源码契约测试结果保留，未为累计通过数重复执行。机器结果见 [supplement-validation.json](2026-09-17/supplement-validation.json)，文件清单与容器身份见 [supplement-inventory.json](2026-09-17/supplement-inventory.json)。
@@ -105,9 +117,9 @@ python tools/interface_analysis/audit.py diagnostic-evidence-repacked.zip new-au
 ## 未执行或待补齐
 
 - **Python3.8 真实运行、ROS/Gazebo、PPU 算子/梯度、相机/施力/时钟服务时序、完整闭环重跑**：当前是 Windows 离线环境，且本任务未授权自动启动长时训练。部署后的服务器验证按 [DEPLOYMENT.md](DEPLOYMENT.md) 执行。
-- **40 项原构建产物、两个系统 Gazebo 插件**：补件没有 `devel` 或 `/opt/ros/noetic/lib/libgazebo_ros_api_plugin.so`、`libgazebo_ros_camera.so`；只有历史 hash，不能宣称当前服务器构建已验证。
+- **40 项原构建产物、两个系统 Gazebo 插件**：用户已确认无法提供原 `devel`；也没有两个原系统插件字节。保留历史 hash 与环境缺口，不能宣称当前服务器构建已验证，不再等待原 devel 补件。
 - **模型运行而非模型字节**：原 model.pt 和 frozen 副本的字节/hash 已核验；本地仍无 torch，尚未加载权重、做 CPU/PPU 推理或反事实检查。原两项网络测试依然是跳过，没有安装普通 torch。
-- **四个源码/审计交付 ZIP**：仍只有其解压目录，部署包的容器 SHA256/原始成员安全性未知。四组 evidence 原 ZIP、完整模型与全部 372 个 NPZ 已补齐，不再列为缺失文件；它们不替代部署包原件。
+- **源码/模型/数据原件**：四个源码/审计 ZIP、四组 evidence 原 ZIP、完整模型与全部 372 个 NPZ 均已补齐并核验；现通过 LFS 归档保存，不再列为缺失文件。
 - **56 回合、真值/学习高度对照、到达后继续 10 秒**：仅提案，没有代码入口、运行或通过记录。
 
 本次联网读取 ROS Noetic `simtime.py` 确认初始化时依据 `/use_sim_time` 选择时钟的代码背景；[研究状态](RESEARCH_STATUS_20260917.md) 所列五篇近邻的 arXiv 题名/摘要也重新读取。它们不是服务器验证的替代。

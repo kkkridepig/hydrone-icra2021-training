@@ -4,7 +4,7 @@
 
 ## 证据范围
 
-首轮读取了四类源码/报告解压目录和四组 evidence 解压目录；随后收到 `artifacts.zip` 及其解压目录，补齐四个原始 evidence ZIP、模型、372 个 NPZ、完整运行日志和 DDPG/SAC 产物。源码部署包的原 ZIP 仍缺。首轮身份见 [初始清单](2026-09-17/input-inventory.json)，当前补件身份见 [补件清单](2026-09-17/supplement-inventory.json) 和 [交付物说明](ARTIFACT_INVENTORY.md)。
+首轮读取了四类源码/报告解压目录和四组 evidence 解压目录；随后收到 `artifacts.zip` 及其解压目录，补齐四个原始 evidence ZIP、模型、372 个 NPZ、完整运行日志和 DDPG/SAC 产物。四个源码/审计交付 ZIP 现已补齐，全部成员与先前交付目录一致；原件与完整产物通过 Git LFS 保存，见 [恢复说明](RECOVERY.md)。首轮身份见 [初始清单](2026-09-17/input-inventory.json)，当前身份见 [补件清单](2026-09-17/supplement-inventory.json)、[原 ZIP 清单](2026-09-17/original-zip-inventory.json) 和 [交付物说明](ARTIFACT_INVENTORY.md)。
 
 phase1、失败 phase2、成功 phase2 的报告在证据副本上重算；首轮诊断用本地重打包容器重算，补件后又用原 `audit.py` 直接读取原 diagnostic evidence ZIP。结果见 [验证记录](VALIDATION.md)、[原 ZIP 重算审计](2026-09-17/audit-original-zip-recomputed.json)。[原审计报告](2026-09-17/audit-original/REPORT.md) 和原 JSON 保留历史原件；本次原 ZIP 的 SHA256 已实算吻合原审计的 `input_sha256`。原模型/frozen 副本身份一致；NPZ 的结构、有限值、日志长度及预览图一致性均已核验，不等于再次运行模型或仿真。
 

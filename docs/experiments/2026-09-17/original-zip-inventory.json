@@ -1,0 +1,250 @@
+{
+  "date": "2026-09-17",
+  "source_deliveries": {
+    "hydrone-diagnostic-audit-20260917": {
+      "original_filename": "hydrone-diagnostic-audit-20260917.zip",
+      "sha256": "2d3a773aad580630cb0ae34f73c8ebcdf801fe6db7616ab36d92fd0cdc87f07d",
+      "bytes": 248120,
+      "zip_entries": 4,
+      "file_count": 4,
+      "member_prefix": "",
+      "all_members_match_previous_directory": true,
+      "path_type_collision_encryption_checks_passed": true,
+      "all_member_crc_passed": true,
+      "isolated_extraction": true,
+      "files": {
+        "REPORT.md": {
+          "sha256": "867d4c21cd167c2de7b7ddca708ed5767ec89df896813d39ef399a5f9998763c",
+          "bytes": 10855
+        },
+        "audit.json": {
+          "sha256": "fe49029105b121301934eb90324bf30807bb4b2592afebb5e90bf9a189c636c1",
+          "bytes": 18090
+        },
+        "audit.py": {
+          "sha256": "675024583489ff109791ea4317c0cff0216bd7b1fad0b9218a2364e62e726f43",
+          "bytes": 8002
+        },
+        "diagnostic-audit.png": {
+          "sha256": "9616c01430c905a1a9a08df20efea9ac73342899aaa4696023d66ec0cab4cc43",
+          "bytes": 258691
+        }
+      }
+    },
+    "hydrone-interface-diagnostic-v1": {
+      "original_filename": "hydrone-interface-diagnostic-v1.zip",
+      "sha256": "eb69e4fbaf11408620e13d8b0be108640d05e50ef6dcaf35288ead35372d7155",
+      "bytes": 51905,
+      "zip_entries": 12,
+      "file_count": 12,
+      "member_prefix": "",
+      "all_members_match_previous_directory": true,
+      "path_type_collision_encryption_checks_passed": true,
+      "all_member_crc_passed": true,
+      "isolated_extraction": true,
+      "files": {
+        "interface-diagnostic.patch": {
+          "sha256": "9df4827c284551239f1ae52f3135211032ba91e639c159334a66a75508b6d0fd",
+          "bytes": 65421
+        },
+        "DEPLOY.md": {
+          "sha256": "71135c2789c6174c89f4e67253ac396225cfb91d312539e78f7cbf219f72fb02",
+          "bytes": 10412
+        },
+        "PACKAGE_MANIFEST.json": {
+          "sha256": "c81925c10568360c8c9d2dd21a9075c481e4297ee6bbaba1581abcd6034169f2",
+          "bytes": 1746
+        },
+        "tools/interface_diagnostic/README.md": {
+          "sha256": "71135c2789c6174c89f4e67253ac396225cfb91d312539e78f7cbf219f72fb02",
+          "bytes": 10412
+        },
+        "tools/interface_diagnostic/diagnose.py": {
+          "sha256": "d570d1ce22707e2d15a19e54afcbd7eb15ed9d1f4791bc5aa6b412303562feca",
+          "bytes": 7166
+        },
+        "tools/interface_diagnostic/diagnostic_core.py": {
+          "sha256": "3be0f47286714189bdec3f85b66c4c49f87a0c5a900b11fe0f84fe53ae242581",
+          "bytes": 7253
+        },
+        "tools/interface_diagnostic/diagnostic_report.py": {
+          "sha256": "34f92f02a10b515c1bcf8657a41720b3ea47212a7b7b956e05a8165d772821d3",
+          "bytes": 10291
+        },
+        "tools/interface_diagnostic/diagnostic_ros.py": {
+          "sha256": "8a672340e84d80adf950e6ced1d0fc85ffc71a8bd7f1162d5b9307d0d566dbcd",
+          "bytes": 2656
+        },
+        "tools/interface_diagnostic/diagnostic_worker.py": {
+          "sha256": "da266877c9ffa13e099d2b93a1a07c440180020dd464ff62da2fad48912c8fb7",
+          "bytes": 12275
+        },
+        "tools/interface_diagnostic/protocol.json": {
+          "sha256": "fdde70baf1e3fb25468496b04a4d014369636942ad7f45db9999dd7d0e835d46",
+          "bytes": 762
+        },
+        "tools/interface_diagnostic/run.bash": {
+          "sha256": "df3b642ba6ebcd987f5511b5dcc30a1be5c4a289ddf4dcd59633df0644fba413",
+          "bytes": 326
+        },
+        "tools/interface_diagnostic/tests/test_diagnostic.py": {
+          "sha256": "ee2831045ed1f54b714dd36651eb280180225f0d141251a4c4dabc1308b19cd5",
+          "bytes": 11143
+        }
+      }
+    },
+    "hydrone-interface-pilot-v1": {
+      "original_filename": "hydrone-interface-pilot-v1.zip",
+      "sha256": "755b2c67591f7d21f0cb0aac4e5718ca003479ed4a84cf530aff7a22318751df",
+      "bytes": 85697,
+      "zip_entries": 17,
+      "file_count": 17,
+      "member_prefix": "",
+      "all_members_match_previous_directory": true,
+      "path_type_collision_encryption_checks_passed": true,
+      "all_member_crc_passed": true,
+      "isolated_extraction": true,
+      "files": {
+        "hydrone-interface-pilot-v1.patch": {
+          "sha256": "8075be5c3653b9458383c828b976ba5bef04445a71851a621d28a86d7d705d78",
+          "bytes": 114344
+        },
+        "DEPLOY.md": {
+          "sha256": "b74be6b3611c815428741072bb09b0f9f57c599b361046d5c97f9907fe608b1d",
+          "bytes": 12437
+        },
+        "PACKAGE_MANIFEST.json": {
+          "sha256": "5edcc956e18c70d1e7404ff546ff8a957175eb7a85d6e94afb3db3bf6f3e05e4",
+          "bytes": 1927
+        },
+        "tools/interface_experiment/LOCAL_VALIDATION.md": {
+          "sha256": "f807cb231e4d441d37df79fd6e1ad646c9da0930eb4de0636aba6c17bd86068d",
+          "bytes": 2381
+        },
+        "tools/interface_experiment/README.md": {
+          "sha256": "b74be6b3611c815428741072bb09b0f9f57c599b361046d5c97f9907fe608b1d",
+          "bytes": 12437
+        },
+        "tools/interface_experiment/assets/robot.xacro": {
+          "sha256": "6528db5cdb055caeb5042fa9bc54fa8ed06c96d58a7b395fb17057a908fa266b",
+          "bytes": 1202
+        },
+        "tools/interface_experiment/assets/simulation.launch": {
+          "sha256": "d90067c4843590bbbf2939f2919660f43b3af8a492989d89f1a6327f664a5879",
+          "bytes": 1389
+        },
+        "tools/interface_experiment/config.json": {
+          "sha256": "bd07ace2f7f9dee690845db36e6b36af6cd8ee2ed6aaffc83b06221c1edfabc5",
+          "bytes": 1461
+        },
+        "tools/interface_experiment/core.py": {
+          "sha256": "62616cc53a3f80ee12e1bc80b08621fd43772a4dabd784e88971ccae82400d79",
+          "bytes": 12727
+        },
+        "tools/interface_experiment/learning.py": {
+          "sha256": "eb7beec1fd2cf7ddf32b1b6e2b3e5b1d2bb44edeb316dc83e1f84a7cab4a6025",
+          "bytes": 15813
+        },
+        "tools/interface_experiment/report.py": {
+          "sha256": "4d51983170fffa6dc35491c8454e117f6749285d104aca8379bbee59a0dd8564",
+          "bytes": 11543
+        },
+        "tools/interface_experiment/ros_io.py": {
+          "sha256": "20e22059ebadc2b3e041c82b0d8f079ffe14bcafcbbe755acbd32d560175ad20",
+          "bytes": 12127
+        },
+        "tools/interface_experiment/run.bash": {
+          "sha256": "da37a160d09f13673b11be6596eee50ae62a80c2d8752ef4e05685ab308f6aec",
+          "bytes": 317
+        },
+        "tools/interface_experiment/run.py": {
+          "sha256": "35c1a287a9ade18488a6f208eac8e37a2c636a2278aac54c179ad5d77511bd4b",
+          "bytes": 12936
+        },
+        "tools/interface_experiment/tests/test_contracts.py": {
+          "sha256": "2f939f6a8090da7bbe5309dd8360b2ff34c23b6efdeaf86c9dbcd139312f9d0f",
+          "bytes": 9046
+        },
+        "tools/interface_experiment/tests/test_learning.py": {
+          "sha256": "389ab933aba06addf47d948123895d79a1ea76f55764f5e01c97f3cf1173af37",
+          "bytes": 2939
+        },
+        "tools/interface_experiment/worker.py": {
+          "sha256": "ba3cfc56785ceb1bfe76935909c9f3c4d14f19fe1df2676807a022df5715da28",
+          "bytes": 12773
+        }
+      }
+    },
+    "hydrone-phase2-clockfix-v1": {
+      "original_filename": "hydrone-phase2-clockfix-v1.zip",
+      "sha256": "bd4a66a8229be1670ff739b6bbaa41f448f2356008c28ee1ffae58a52b48128f",
+      "bytes": 23925,
+      "zip_entries": 7,
+      "file_count": 7,
+      "member_prefix": "",
+      "all_members_match_previous_directory": true,
+      "path_type_collision_encryption_checks_passed": true,
+      "all_member_crc_passed": true,
+      "isolated_extraction": true,
+      "files": {
+        "phase2-clockfix.patch": {
+          "sha256": "43d8211243c9d733bf01aee4945a91c6ff65732a0c54c5224b9329b14e971095",
+          "bytes": 17008
+        },
+        "PACKAGE_MANIFEST.json": {
+          "sha256": "a73dfa1f691dc01c58d198473227d45e142d248bdad2836952b5cfc10197ae1d",
+          "bytes": 682
+        },
+        "tools/interface_experiment/ros_io.py": {
+          "sha256": "8efb3c230897e495544dfde5fd06af47b4f816a7386b087a5ab1bdae67ec9725",
+          "bytes": 14247
+        },
+        "tools/interface_experiment/run.py": {
+          "sha256": "8dcd1a98a5c9f9d7f03bdc805c7f203f09c6a4f7432de86d7de17cdaab188ce5",
+          "bytes": 14746
+        },
+        "tools/interface_experiment/tests/test_startup.py": {
+          "sha256": "93c30d42ca7883124dc88e2320dfed8173ffbe6a01cabe27106667a0bea71152",
+          "bytes": 8138
+        },
+        "README.md": {
+          "sha256": "aee72c13659c3b0804ad3f4b751d3a920731bdccb5610f745fd33aa59c371e8f",
+          "bytes": 4061
+        },
+        "DIAGNOSIS.md": {
+          "sha256": "e0994c16d1a8701f109063b7d9ee4dd695118939ba8f79221f29b0358322f855",
+          "bytes": 5823
+        }
+      }
+    }
+  },
+  "other_root_archives": {
+    "artifacts.zip": {
+      "sha256": "1262e30830fae7041c8dc7ef153433bf5f27b31669691a2088737d68758d0060",
+      "bytes": 178519746,
+      "matches_previously_verified_archive": "complete_artifacts_backup"
+    },
+    "evidence (4).zip": {
+      "sha256": "ac537c9f5c489d93ea5a601796a73f5126136ddf6aa88a217d709a5b473ba21e",
+      "bytes": 10417764,
+      "matches_previously_verified_archive": "interface_diagnostic_v1"
+    },
+    "evidence（1）.zip": {
+      "sha256": "40e1dcdff31b3d28b076d6e8890a43399c7cc7f1ac164d9a038329d4bf77c816",
+      "bytes": 48238,
+      "matches_previously_verified_archive": "interface_phase2_v1"
+    },
+    "evidence（2）.zip": {
+      "sha256": "aec3c35aa88951667b212ac9b76bf2d6e0fdc99d675651bce7425aadfeb6c241",
+      "bytes": 2460332,
+      "matches_previously_verified_archive": "interface_phase1_v1"
+    },
+    "evidence（3）.zip": {
+      "sha256": "fee0a4ec92bf1ba835425ef55099eea9706e25b1bd58bd668d40d1df3e413a20",
+      "bytes": 7712038,
+      "matches_previously_verified_archive": "interface_phase2_v2_clockfix"
+    }
+  },
+  "classification": "By complete member set and SHA256; filenames are recorded after identification",
+  "patches_reapplied": false
+}

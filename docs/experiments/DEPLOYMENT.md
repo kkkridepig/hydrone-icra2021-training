@@ -11,6 +11,8 @@
 
 本次仓库整理没有执行以下长时服务器命令，也没有实现提议中的 56 回合/到达后继续 10 秒功能。已有成功数据不需要为了整理 Git 而重跑。
 
+换电脑时先按 [恢复说明](RECOVERY.md) 下载 Git LFS 归档，校验并恢复 5 个模型、372 个 NPZ 与完整运行记录。四个原源码 ZIP 已保存；不要重复应用其中补丁。原服务器 40 项 `devel` 已确认无法提供，新机器重编译后的身份验收仍未完成，不能绕过下文的 provenance 检查。
+
 ## 环境与源码身份
 
 常用根目录为 `/mnt/workspace/hydrone_ws`。PPU 的 torch 由镜像提供，**不得 pip 安装/替换 torch、torchvision、CUDA wheel，不升级 CUDA 或驱动**。历史 `phase1_evidence/accelerator.json` 记录 PPU-ZW810E、torch `2.0.0a0+nv2303`、Python3.8 site-packages；这是历史实测，不保证当前镜像相同。
@@ -169,7 +171,7 @@ nohup bash tools/interface_diagnostic/run.bash \
 
 所有主入口要求输出目录不存在。失败时保留 `ERROR.txt`、`REPORT.md`、`report.json`、provenance 与 `evidence.zip`；若 shell 环境初始化先失败，可能只有外层日志。不要删除失败再复用目录名。
 
-evidence 打包省略 `.pt`/`.npz` 与完整 ROS 日志树。原 phase1 数据、成功模型、运行配置、构建身份及完整日志应保留在持久化盘，并按 [交付物清单](ARTIFACT_INVENTORY.md) 在仓库外归档。模型/数组不进入 Git，也不以 evidence 替代它们。
+evidence 打包省略 `.pt`/`.npz` 与完整 ROS 日志树。原 phase1 数据、成功模型、运行配置及完整日志已包含在本仓库 Git LFS 的完整 `artifacts.zip`；按 [恢复说明](RECOVERY.md) 下载/恢复，并在持久化盘另留备份。新运行输出继续保留在忽略的 artifacts 目录，不自动上传。原构建身份只保留历史 hash，不能用 evidence 或模型替代构建字节。
 
 本次完整备份的 `artifacts.zip` SHA256 是 `1262e30830fae7041c8dc7ef153433bf5f27b31669691a2088737d68758d0060`。归档内的 `mnt/workspace/hydrone_ws/artifacts/` 包含四次界面运行与 `server/` 下的 DDPG/SAC 产物，不包含部署源码、原 `devel` 或系统插件。恢复时先在新的隔离目录检查成员路径及 [补件清单](2026-09-17/supplement-inventory.json)，不直接解压覆盖 `/mnt/workspace/hydrone_ws`，也不把 `server/` 下各运行目录的 `checkpoint.pt` 用作界面模型。
 

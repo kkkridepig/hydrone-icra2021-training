@@ -14,13 +14,14 @@ ROS Noetic + Gazebo Classic 11 下的 Hydrone 空水跨介质训练工作区。�
 - [研究状态](docs/experiments/RESEARCH_STATUS_20260917.md)：实验结果、负结果、局限与尚未执行的下一步。
 - [交付物与提交映射](docs/experiments/ARTIFACT_INVENTORY.md)：实际收到的解压目录、文件 SHA256、补丁顺序及缺失原件。
 - [本次验证记录](docs/experiments/VALIDATION.md)：实际通过、跳过及未执行的检查。
+- [换电脑恢复模型与数据](docs/experiments/RECOVERY.md)：Git LFS 下载、完整归档校验、防覆盖恢复，以及续跑的实际边界。
 - [两阶段入口](tools/interface_experiment/run.bash)、[冻结诊断入口](tools/interface_diagnostic/run.bash)、[离线审计](tools/interface_analysis/audit.py)。
 
 真实日志离线重算确认：phase1 为 48/48，clockfix 后 phase2 为 120/120；追加诊断为 36 校准＋168 测试，teacher/short 各 24/24，其余五种策略各 20/24。全部跨界不等于任务成功，当前没有证实 separated 的稳定性优势。到达后继续运行 10 秒的 56 回合方案仍是提案。
 
-补件中的 `artifacts.zip`、四个原始 evidence ZIP、原模型及 372 个 NPZ 已完成离线核验；诊断 ZIP 与模型哈希均吻合历史 provenance，并已直接用原 ZIP 重算审计。源码部署包的原 ZIP 仍未提供，已集成源码的文件身份不受影响。DDPG/SAC 两次 Stage 1 记录各完成 1000 个训练回合，只能说明运行完成，不能据此证明收敛或论文复现。
+`artifacts.zip`、四个原始 evidence ZIP、原模型及 372 个 NPZ 已完成离线核验；诊断 ZIP 与模型哈希均吻合历史 provenance，并已直接用原 ZIP 重算审计。四个源码/审计交付 ZIP 也已补齐，与此前交付目录逐字节一致。DDPG/SAC 两次 Stage 1 记录各完成 1000 个训练回合，只能说明运行完成，不能据此证明收敛或论文复现。
 
-本次没有启动 ROS/Gazebo/PPU 训练。权重、数组、完整日志与 ZIP 保留在 Git 仓库外，仅提交清单和小型汇总。原包 README 中的“交付前未运行”等表述按历史原件保留，当前入口说明以新增部署文档为准。
+本次没有启动 ROS/Gazebo/PPU 训练。根据保留关键实验产物的新要求，完整备份与四个源码原包保存在 [Git LFS 归档目录](archives/experiments/2026-09-17/)，包含 5 个 `.pt`、372 个 NPZ、配置和原日志。用 [恢复工具](tools/interface_archive/restore.py) 取回到新目录；原构建产物缺失仍限制新机器上的冻结诊断验收。原包 README 中的“交付前未运行”等表述按历史原件保留，当前入口说明以新增部署文档为准。
 
 ## 当前训练入口
 
@@ -36,6 +37,6 @@ Stage 1：1000 回合；Stage 2：2500 回合；每回合最多 500 步。实际
 
 四个依赖仓库已完整纳入 `src/`，不是需要额外拉取的 git submodule；包括模型、网格和本机已有修改。`provenance/source-repositories.json` 记录上游 URL、原提交和本地修改状态；`provenance/source-sha256.json` 记录发布时文件内容。上游 README 中的旧环境路径不作为本仓库部署入口。
 
-各目录保留原许可证及文件版权声明，见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。这是源码快照仓库，不保留嵌套上游 `.git` 历史。编译输出、Conda/venv、日志、checkpoint、缓存及迁移备份不进入 Git；排除清单见 provenance。
+各目录保留原许可证及文件版权声明，见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。这是源码快照仓库，不保留嵌套上游 `.git` 历史。编译输出、Conda/venv、缓存和新运行输出继续忽略；本次经核验的历史备份仅通过上述限定目录的 Git LFS 归档保存，排除清单见 provenance。
 
 本地工作树位于 `/home/chenke/hydrone_ws`；服务器克隆后所有新输出路径由脚本基于实际仓库目录生成。不要复制本机 build/devel 或旧虚拟环境到服务器。

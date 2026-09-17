@@ -4,11 +4,11 @@
 
 ## 接收形式与仓库基线
 
-首轮只收到下列已解压目录，没有原始 ZIP，因此最初不声明容器 SHA256 或原 ZIP 安全性。随后补件提供了 `artifacts.zip`、四次实验的原始 `evidence.zip`、完整数组/模型与 server 产物，已完成原件核验，详见下节。**三个源码部署包及离线审计交付包的原 ZIP 仍缺**，不能把四个 evidence ZIP 当作四个源码交付包。
+首轮只收到下列已解压目录，没有原始 ZIP，因此最初不声明容器 SHA256 或原 ZIP 安全性。随后提供 `artifacts.zip`、四次实验的 evidence、完整数组/模型与 server 产物；最新又补齐三个源码部署包和离线审计包的原 ZIP。所有原 ZIP 已核验，源码 ZIP 和 evidence ZIP 按实际内容分别记录。按用户保存关键产物的新要求，完整备份及四个源码原包通过 Git LFS 归档，见 [换电脑恢复说明](RECOVERY.md)。
 
 初始目录是附件区，不是 Git 工作树。新克隆隔离 checkout 后，`git status` 干净；仓库内未找到 `AGENTS.md`，按任务提供的全局说明执行。`origin/main` 与 HEAD 均为 `8790a9ea1598c779e38e1fa5eeb3eeec6ca87bcf`，与旧实验基线无差异，没有回滚 main。工作分支为 `experiment/interface-mechanism-audit`。
 
-[input-inventory.json](2026-09-17/input-inventory.json) 是首轮快照，对 8 个输入目录的 **1382 个文件**逐一记录相对路径、字节数和 SHA256；其中 `original_zip_sha256=null` 表示当时尚未收到，当前原件信息由 [supplement-inventory.json](2026-09-17/supplement-inventory.json) 补充，不改写历史快照。下表的“目录清单哈希”是对按路径排序的 `文件SHA256 + 两个空格 + 相对路径 + LF` 拼接文本计算 SHA256，**不是 ZIP 哈希**。
+[input-inventory.json](2026-09-17/input-inventory.json) 是首轮快照，对 8 个输入目录的 **1382 个文件**逐一记录相对路径、字节数和 SHA256；其中 `original_zip_sha256=null` 表示当时尚未收到，当前原件信息由 [supplement-inventory.json](2026-09-17/supplement-inventory.json) 和 [original-zip-inventory.json](2026-09-17/original-zip-inventory.json) 补充，不改写历史快照。下表的“目录清单哈希”是对按路径排序的 `文件SHA256 + 两个空格 + 相对路径 + LF` 拼接文本计算 SHA256，**不是 ZIP 哈希**。
 
 | 实际目录 | 文件数 | 字节数 | 身份与职责 |
 |---|---:|---:|---|
@@ -61,11 +61,26 @@
 | `interface_diagnostic_v1` | 844 | frozen 模型、204 个 NPZ；完整 evidence_manifest 的 816 项全部匹配 |
 | `server` | 20 | DDPG/SAC 各一个 Stage 1/seed0 运行目录，含 checkpoint、配置、manifest、validation 与日志 |
 
-外层归档没有 `.py`、`.patch`、`.bash` 或 `PACKAGE_MANIFEST.json`，它是**运行产物备份**，没有新的部署代码要应用。其 1789 个文件的路径、大小和 hash 都在 supplement-inventory.json；只提交该清单、小型验证汇总与审计 JSON，不把 ZIP、模型、NPZ 或长日志提交 Git。此次文档/清单提交可用 `git log -- docs/experiments/2026-09-17/supplement-inventory.json` 精确追溯，原四类代码提交保持不变。
+外层归档没有 `.py`、`.patch`、`.bash` 或 `PACKAGE_MANIFEST.json`，它是**运行产物备份**，没有新的部署代码要应用。其 1789 个文件的路径、大小和 hash 都在 supplement-inventory.json。此前仅提交清单和小型汇总；按最新授权，完整原备份现通过 Git LFS 保存，包含其中模型、NPZ 和日志。文档/清单提交可用 `git log -- docs/experiments/2026-09-17/supplement-inventory.json` 追溯，原四类代码提交保持不变。
 
 三个界面模型文件均为 237757 字节，SHA256 均为 `83f8c9646a29d8ade96ac7a327b6923694eace9767fda0a769b0e16a4e5728ea`：首次 phase2 的 `models/seed_0/model.pt`、成功 clockfix phase2 的同名模型、diagnostic 的 `frozen/model.pt`。这证明本次收到的字节与历史 diagnostic provenance 对应；未加载 checkpoint 推理。模型相同不把首次失败 phase2 的 report 变成成功来源。
 
 `server/` 中两次运行均有 1000 个训练回合＋40 个确定性评估记录，训练步数重新求和分别为 DDPG 177443、SAC 497866；与 summary/validation 一致。DDPG checkpoint 为 42763179 字节、SHA256 `e4705ee88831a16a57f9437ffd29576b9cc1daa02388dae7720f8388622ddde5`；SAC checkpoint 为 44911025 字节、SHA256 `2ee358e7243bbf4dbaa67141e8c0c6db9eec0808e40ed3c147076c86f8f899f3`。记录历史执行完成，不宣称本次复验梯度、策略收敛或论文指标，也不将它们作为界面教师模型。
+
+## 补齐源码原 ZIP 与 Git LFS 保存
+
+四个原 ZIP 先检查路径穿越、链接/特殊文件、重复/大小写冲突和加密成员，再在仓库外隔离解压。全量读取通过 CRC；按成员集合和 SHA256 确认与此前交付目录完全一致，没有根据文件名或编号猜测顺序。所有 README/部署说明、patch、manifest 与此前已读版本相同，无需重复应用补丁。
+
+| 实际原包名 | 字节数 | 文件数 | 原 ZIP SHA256 |
+|---|---:|---:|---|
+| `hydrone-interface-pilot-v1.zip` | 85697 | 17 | `755b2c67591f7d21f0cb0aac4e5718ca003479ed4a84cf530aff7a22318751df` |
+| `hydrone-phase2-clockfix-v1.zip` | 23925 | 7 | `bd4a66a8229be1670ff739b6bbaa41f448f2356008c28ee1ffae58a52b48128f` |
+| `hydrone-interface-diagnostic-v1.zip` | 51905 | 12 | `eb69e4fbaf11408620e13d8b0be108640d05e50ef6dcaf35288ead35372d7155` |
+| `hydrone-diagnostic-audit-20260917.zip` | 248120 | 4 | `2d3a773aad580630cb0ae34f73c8ebcdf801fe6db7616ab36d92fd0cdc87f07d` |
+
+源码原 ZIP 与原 `artifacts.zip` 保存到 [archives/experiments/2026-09-17](../../archives/experiments/2026-09-17/)，共 5 个 LFS 对象、178929393 字节。Git 保存指针，LFS 保存完整原字节；没有重打包、修改模型或更改历史 provenance。新根目录的 `evidence（1）.zip` 实际匹配失败 phase2，`evidence（2）.zip` 匹配 phase1，`evidence（3）.zip` 匹配成功 phase2，`evidence (4).zip` 匹配 diagnostic；这些副本已在 artifacts.zip 内保存，不再重复入库。
+
+[manifest.json](../../archives/experiments/2026-09-17/manifest.json) 将归档映射到已核验源码提交 `525060e885ac9dc7849af16c8a4c9cc0dbaae897`，源码文件继续对应下表中的原职责提交。归档提交可用 `git log -- archives/experiments/2026-09-17/manifest.json` 追溯。新增 [restore.py](../../tools/interface_archive/restore.py) 独立完成下载后校验/恢复，不进入实验的正常观测或控制路径，不修改受监控源码。
 
 ## 真实应用顺序与提交
 
@@ -138,9 +153,9 @@ diagnostic 顶层 `DEPLOY.md` 是部署文档副本，外部保留；manifest �
 
 报告同名文件没有覆盖任何运行入口。新 `audit-recomputed.json` 是本次产生的独立结果，不覆盖原审计。新生成 JSON 以 UTF-8/LF 保存；原源码、原报告和 manifest 未格式化。`.gitattributes` 对导入原件关闭文本转换，避免未来 checkout 改变行尾。
 
-## 证据文件职责与外部归档
+## 证据文件职责与归档
 
-每个 evidence 文件的相对路径和 hash 均在 input-inventory.json；下表按文件类型解释职责，长日志、相机预览、URDF 与重复 ZIP 不进入 Git。
+每个 evidence 文件的相对路径和 hash 均在 input-inventory.json；下表按文件类型解释职责。完整产物以原 artifacts.zip 的 LFS 对象保存，恢复后的目录和新运行输出仍由 `.gitignore` 忽略。
 
 | 路径/类型 | 职责与保留规则 |
 |---|---|
@@ -157,12 +172,12 @@ diagnostic 顶层 `DEPLOY.md` 是部署文档副本，外部保留；manifest �
 | `sensor_preflight.json`、`physics_inventory.json`、`expanded_robot.urdf` | 传感控制链与实际展开模型检查 |
 | `ERROR.txt`、`gazebo.log`、`worker.log`、`xacro.log` | 故障/启动/退出证据；失败运行也保留 |
 | 完整目录中的 `*.npz` | 48 个 phase1、120 个 phase2 评估、204 个 diagnostic 图像数组；全部外部归档 |
-| `models/seed_0/model.pt`、`frozen/model.pt` | 原界面模型与冻结副本；本轮已核验字节 hash，不加入 Git |
-| `server/*/checkpoint.pt`、`config.yaml`、`run/`、`validation.json` | 旧 DDPG/SAC 独立实验产物；只归档身份与执行计数，不覆盖运行入口 |
+| `models/seed_0/model.pt`、`frozen/model.pt` | 原界面模型与冻结副本；已核验字节 hash，通过完整 LFS 备份保存 |
+| `server/*/checkpoint.pt`、`config.yaml`、`run/`、`validation.json` | 旧 DDPG/SAC 独立实验产物；完整保存在 LFS 备份，不覆盖运行入口 |
 
-建议把四组 evidence、四类交付原目录、研究总结及未来补齐的原 ZIP，连同本清单，归档在受控持久化存储的独立 `interface-20260917` 目录，并登记实际存储 URI 与访问责任人；本次未创建外部上传，也不虚构存储地址。源文件清单允许之后复核归档内容，不能恢复已缺失的数据字节。
+本仓库的 LFS 归档可用于换电脑恢复。仍建议在持久化盘另存五个原 ZIP、研究总结和这些清单作为第二份备份。逐文件清单用于复核；单独保存清单无法恢复权重和数组字节。
 
-服务器必须另存完整 `artifacts/interface_phase1_v1`（包括 48 个训练 NPZ）、失败 phase2、成功 `artifacts/interface_phase2_v2_clockfix`（含权重）、完整 diagnostic（含 204 个 NPZ）。这些、`.venvs`、`build/devel/install`、长日志、论文和缓存不提交。四个 evidence ZIP 本身仍不含 `.pt` 或 `.npz`；本轮在外层 artifacts.zip 的完整运行目录中补齐了这些字节，不能混淆两层归档。
+完整 LFS 备份含 phase1 的 48 个训练 NPZ、失败 phase2、成功 phase2 模型与 120 个评估 NPZ、diagnostic 的 204 个 NPZ 和原日志。不含 `.venvs`、`build/devel/install`、系统插件、论文和缓存。四个 evidence ZIP 本身仍不含 `.pt` 或 `.npz`，这些字节位于外层 artifacts.zip 的完整运行目录，不能混淆两层归档。
 
 ## clockfix 的真实身份迁移
 
@@ -180,9 +195,9 @@ diagnostic 顶层 `DEPLOY.md` 是部署文档副本，外部保留；manifest �
 
 ## 原件缺口与身份边界
 
-- 需要补齐与三个源码目录及审计目录对应的四个**原始 ZIP**，才能核验容器 SHA256 与原始成员路径。已知目标包括 `hydrone-interface-diagnostic-v1.zip`、`hydrone-diagnostic-audit-20260917.zip`；前两个 ZIP 的精确原文件名仍应以实际补件为准。
+- 三个源码目录与审计目录对应的四个原始 ZIP 已补齐，容器 SHA256、成员安全性、CRC 和内容对应均已核验；不再有源码原包缺口。
 - 四组 evidence 的原 ZIP 已补齐并逐一核验；诊断 ZIP 的实算 hash 已与旧 audit.json 相同，不再是仅引用。
 - 首轮临时重打包 SHA256 为 `9e967c9fd2077c3cd7787dfec569d88295be302e44cf4f2c0c6a34d20c9d5b37`，只保留作为首轮验证过程说明；本轮审计直接读取原 ZIP。两者的 ZIP 内核验均为 612 项，完整目录另核验 816 项。
 - 原成功模型与 frozen 副本、全部 372 个 NPZ 已提供并核验。模型加载、CPU/PPU 网络执行和反事实推理仍未做，本地无 torch；无需再次索取这些已收到的数据文件。
-- 仍缺 40 项 `devel` 构建产物（具体路径和历史 hash 见 [首轮验证快照](2026-09-17/validation-results.json) 的 `provenance.missing_server_build_files`），以及历史 diagnostic provenance 监控的 `/opt/ros/noetic/lib/libgazebo_ros_api_plugin.so`、`libgazebo_ros_camera.so` 字节；它们属于服务器身份核验，不应提交 Git。
-- 源码与日志整理已完成。源码/审计交付包的原 ZIP 容器身份，以及原服务器构建/运行验证仍不完整；没有重写缺失补丁、修改历史 provenance 或伪造 hash。
+- 用户已确认无法提供原 40 项 `devel` 构建产物；不再等待这些文件，但保留 [首轮验证快照](2026-09-17/validation-results.json) 中的具体路径/hash。两个原系统 Gazebo 插件字节也未提供。这是原环境不可恢复的已知边界，不阻止保存模型/数据，也不等于新构建通过验收。
+- 源码、原 ZIP 和运行产物归档已整理。原服务器构建/运行验证仍不完整；没有重写补丁、修改历史 provenance、伪造 hash 或新增绕过检查的迁移例外。
