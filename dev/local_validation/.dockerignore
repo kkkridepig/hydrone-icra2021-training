@@ -1,0 +1,5 @@
+*
+!Dockerfile
+!entrypoint.bash
+!ros_smoke.py
+!requirements-cpu.txt
